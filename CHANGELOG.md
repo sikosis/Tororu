@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.15
+
+- Documented the long-term goal of developing Tororu into a lightweight,
+  Haiku-native HTML application framework.
+- Added a graphical development tracker and detailed milestones covering
+  renderer stabilisation, `libtororu`, the C++ host API, actions, CSS, an
+  example application, and future Gengo integration.
+
 ## v0.14
 
 - Corrected embedded images to use Haiku's translator-bitmap resource type,

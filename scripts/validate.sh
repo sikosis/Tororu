@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.14"' src/Constants.h \
+grep -q 'APP_VERSION = "0.15"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.14-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.15-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 1,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 4,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 5,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 
 if grep -R -q 'config/settings/FlyingTroll' src; then
 	fail 'active source still uses the FlyingTroll settings directory'
