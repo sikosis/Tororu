@@ -3,10 +3,7 @@
 #include <stdio.h>
 
 OakApp::OakApp() : BApplication(APP_SIGNATURE) {
-	BRect r;
-	BScreen scr;
-	r = scr.Frame();
-	r.InsetBy(100, 100);
+	BRect r(100, 100, 740, 580);
 	theWindow = new OakWindow(r);
 	//if (s != NULL)
 	//	theWindow->LoadFile(s);

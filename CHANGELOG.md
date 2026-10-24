@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.17
+
+- Reduced the default Tororu window size to 640 by 480 pixels.
+
 ## v0.16
 
 - Renamed File > Close to File > Quit and made it terminate the application.
