@@ -16,13 +16,17 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.17"' src/Constants.h \
+grep -q 'APP_VERSION = "0.18"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.17-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.18-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 1,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 7,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 8,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
+grep -q '^resource vector_icon {' src/Tororu.rdef \
+	|| fail 'native application icon is missing'
+test -f artwork/TororuIcon.png || fail 'high-resolution icon source is missing'
+test -f artwork/TororuIcon.hvif || fail 'native HVIF icon is missing'
 
 if grep -R -q 'config/settings/FlyingTroll' src; then
 	fail 'active source still uses the FlyingTroll settings directory'

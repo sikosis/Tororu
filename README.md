@@ -1,7 +1,7 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.17-f5a623" alt="Version v0.17">
+  <img src="https://img.shields.io/badge/version-v0.18-f5a623" alt="Version v0.18">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
@@ -19,7 +19,7 @@ the framework.
 
 ## Current status
 
-Version v0.17 establishes the Tororu source tree from the preserved
+Version v0.18 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.
@@ -123,6 +123,7 @@ make validate
 ## Source layout
 
 - `src/` — active Tororu source and build definition.
+- `artwork/` — high-resolution artwork sources and native Haiku icon assets.
 - `FlyingTroll-Original/` — untouched upstream snapshot.
 - `GENGO.md` — draft specification for the future Gengo scripting language.
 - `scripts/validate.sh` — metadata and repository consistency checks.

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.18
+
+- Added a high-resolution Tororu icon with Haiku-native window styling.
+- Embedded a scalable HVIF application icon for Tracker and Deskbar.
+
 ## v0.17
 
 - Reduced the default Tororu window size to 640 by 480 pixels.
