@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.14
+
+- Corrected embedded images to use Haiku's translator-bitmap resource type,
+  restoring the toolbar buttons and built-in page artwork.
+
 ## v0.13
 
 - Embedded toolbar images and built-in page artwork in the application.
