@@ -125,7 +125,7 @@ SYMBOLS =
 DEBUGGER = 
 
 #	specify additional compiler flags for all files
-COMPILER_FLAGS = -std=c++17
+COMPILER_FLAGS =
 
 #	specify additional linker flags
 LINKER_FLAGS =

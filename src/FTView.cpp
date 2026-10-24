@@ -4,8 +4,7 @@
 
 FTView::FTView( BRect rect, const char *name, uint32 rmode,
 	bool pan, bool st, bool scroll) :
-	BView(rect, name, rmode, B_WILL_DRAW | B_FRAME_EVENTS)
-{
+	BView(rect, name, rmode, B_WILL_DRAW | B_FRAME_EVENTS) {
 	show_panel = pan;
 	show_statusbar = st;
 	show_scroll = scroll;
@@ -62,9 +61,9 @@ FTView::FTView( BRect rect, const char *name, uint32 rmode,
 		r.right += 32;
 		r.left = r.right - 30;
 		button_back = new OakButton(r, "back",
-			BTranslationUtils::GetBitmapFile("images/button_back"),
-			BTranslationUtils::GetBitmapFile("images/button_back_on"),
-			BTranslationUtils::GetBitmapFile("images/button_back_dis"),
+			BTranslationUtils::GetBitmap("images/button_back"),
+			BTranslationUtils::GetBitmap("images/button_back_on"),
+			BTranslationUtils::GetBitmap("images/button_back_dis"),
 			new BMessage(HISTORY_BACK));
 		button_back->SetEnabled(false);
 		panel->AddChild(button_back);
@@ -72,9 +71,9 @@ FTView::FTView( BRect rect, const char *name, uint32 rmode,
 		r.right += 10;
 		r.left = r.right - 9;
 		button_hback = new OakButton(r, "hback",
-			BTranslationUtils::GetBitmapFile("images/button_down"),
-			BTranslationUtils::GetBitmapFile("images/button_down_on"),
-			BTranslationUtils::GetBitmapFile("images/button_down_dis"),
+			BTranslationUtils::GetBitmap("images/button_down"),
+			BTranslationUtils::GetBitmap("images/button_down_on"),
+			BTranslationUtils::GetBitmap("images/button_down_dis"),
 			NULL, true);
 		button_hback->SetEnabled(false);
 		panel->AddChild(button_hback);
@@ -82,9 +81,9 @@ FTView::FTView( BRect rect, const char *name, uint32 rmode,
 		r.right += 32;
 		r.left = r.right - 30;
 		button_forward = new OakButton(r, "forward",
-			BTranslationUtils::GetBitmapFile("images/button_forward"),
-			BTranslationUtils::GetBitmapFile("images/button_forward_on"),
-			BTranslationUtils::GetBitmapFile("images/button_forward_dis"),
+			BTranslationUtils::GetBitmap("images/button_forward"),
+			BTranslationUtils::GetBitmap("images/button_forward_on"),
+			BTranslationUtils::GetBitmap("images/button_forward_dis"),
 			new BMessage(HISTORY_FORWARD));
 		button_forward->SetEnabled(false);
 		panel->AddChild(button_forward);
@@ -92,9 +91,9 @@ FTView::FTView( BRect rect, const char *name, uint32 rmode,
 		r.right += 32;
 		r.left = r.right - 30;
 		button_home = new OakButton(r, "home",
-			BTranslationUtils::GetBitmapFile("images/button_home"),
-			BTranslationUtils::GetBitmapFile("images/button_home_on"),
-			BTranslationUtils::GetBitmapFile("images/button_home_dis"),
+			BTranslationUtils::GetBitmap("images/button_home"),
+			BTranslationUtils::GetBitmap("images/button_home_on"),
+			BTranslationUtils::GetBitmap("images/button_home_dis"),
 			new BMessage(GO_HOME));
 		panel->AddChild(button_home);
 	
@@ -108,9 +107,9 @@ FTView::FTView( BRect rect, const char *name, uint32 rmode,
 		r.right += 32;
 		r.left = r.right - 30;
 		button_search = new OakButton(r, "search",
-			BTranslationUtils::GetBitmapFile("images/button_search"),
-			BTranslationUtils::GetBitmapFile("images/button_search_on"),
-			BTranslationUtils::GetBitmapFile("images/button_search_dis"),
+			BTranslationUtils::GetBitmap("images/button_search"),
+			BTranslationUtils::GetBitmap("images/button_search_on"),
+			BTranslationUtils::GetBitmap("images/button_search_dis"),
 			new BMessage(SEARCH_AGAIN));
 		button_search->SetEnabled(false);
 		panel->AddChild(button_search);
@@ -163,6 +162,8 @@ FTView::FTView( BRect rect, const char *name, uint32 rmode,
 
 	UpdateButtons();
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 
 void FTView::AttachedToWindow()
 {

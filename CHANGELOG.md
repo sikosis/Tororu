@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.13
+
+- Embedded toolbar images and built-in page artwork in the application.
+- Made bitmap loading fall back to named application resources so Tororu can
+  launch correctly from any working directory.
+
+## v0.12
+
+- Removed the redundant C++ language flag from the shared Haiku compiler
+  options so resource preprocessing no longer emits a C compiler warning.
+
 ## v0.11
 
 - Established the active Tororu source tree from the preserved FlyingTroll

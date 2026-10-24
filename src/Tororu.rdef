@@ -10,10 +10,27 @@ resource file_types message {
 resource app_version {
 	major  = 0,
 	middle = 1,
-	minor  = 1,
+	minor  = 3,
 
 	variety = B_APPV_DEVELOPMENT,
 	internal = 0
 };
 
 resource app_flags B_MULTIPLE_LAUNCH;
+
+resource(100, "images/button_back") #'PNG ' import "images/button_back";
+resource(101, "images/button_back_on") #'PNG ' import "images/button_back_on";
+resource(102, "images/button_back_dis") #'PNG ' import "images/button_back_dis";
+resource(103, "images/button_down") #'PNG ' import "images/button_down";
+resource(104, "images/button_down_on") #'PNG ' import "images/button_down_on";
+resource(105, "images/button_down_dis") #'PNG ' import "images/button_down_dis";
+resource(106, "images/button_forward") #'PNG ' import "images/button_forward";
+resource(107, "images/button_forward_on") #'PNG ' import "images/button_forward_on";
+resource(108, "images/button_forward_dis") #'PNG ' import "images/button_forward_dis";
+resource(109, "images/button_home") #'PNG ' import "images/button_home";
+resource(110, "images/button_home_on") #'PNG ' import "images/button_home_on";
+resource(111, "images/button_home_dis") #'PNG ' import "images/button_home_dis";
+resource(112, "images/button_search") #'PNG ' import "images/button_search";
+resource(113, "images/button_search_on") #'PNG ' import "images/button_search_on";
+resource(114, "images/button_search_dis") #'PNG ' import "images/button_search_dis";
+resource(115, "images/haikulogo") #'TGA ' import "images/haikulogo";

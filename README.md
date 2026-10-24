@@ -1,7 +1,7 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.11-f5a623" alt="Version v0.11">
+  <img src="https://img.shields.io/badge/version-v0.13-f5a623" alt="Version v0.13">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
@@ -15,7 +15,7 @@ fast browsing of documentation and other local HTML files.
 
 ## Current status
 
-Version v0.11 establishes the Tororu source tree from the preserved
+Version v0.13 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.
@@ -37,9 +37,8 @@ Haiku development environment.
 make
 ```
 
-The application currently loads its toolbar images from `src/images`, so run
-the development build with that directory as its working directory until the
-assets are moved into application resources.
+Toolbar images and built-in page artwork are embedded in the application, so
+the resulting executable can be launched from any working directory.
 
 To run the repository's platform-independent consistency checks:
 
