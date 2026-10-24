@@ -1,7 +1,7 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.15-f5a623" alt="Version v0.15">
+  <img src="https://img.shields.io/badge/version-v0.16-f5a623" alt="Version v0.16">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
@@ -19,7 +19,7 @@ the framework.
 
 ## Current status
 
-Version v0.15 establishes the Tororu source tree from the preserved
+Version v0.16 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.
@@ -30,6 +30,7 @@ Tororu currently supports:
 - back and forward history;
 - bookmarks stored in `~/config/settings/Tororu/Bookmarks`;
 - in-page text search;
+- built-in Gengo language help;
 - basic HTML text, links, images, tables, and character-set conversion.
 
 ## Project goals
@@ -123,6 +124,7 @@ make validate
 
 - `src/` — active Tororu source and build definition.
 - `FlyingTroll-Original/` — untouched upstream snapshot.
+- `GENGO.md` — draft specification for the future Gengo scripting language.
 - `scripts/validate.sh` — metadata and repository consistency checks.
 
 ## Heritage

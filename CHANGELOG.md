@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.16
+
+- Renamed File > Close to File > Quit and made it terminate the application.
+- Removed the obsolete demo window from the active Tororu build.
+- Added a top-level Gengo menu with six built-in help pages derived from the
+  draft Gengo specification.
+
 ## v0.15
 
 - Documented the long-term goal of developing Tororu into a lightweight,

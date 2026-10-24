@@ -1,7 +1,6 @@
 #include "OakWindow.h"
 #include "OakVBar.h"
 #include "OakAboutWindow.h"
-#include "OakDemoWindow.h"
 
 #include <fs_attr.h>
 #include <Looper.h>
@@ -92,6 +91,13 @@ const char *GetUrlFromLink( const char *fname )
 		return "";
 }
 
+void AddGengoHelpItem(BMenu *menu, const char *label, const char *url) {
+	BMessage *message = new BMessage(GENGO_HELP);
+	message->AddString("url", url);
+	menu->AddItem(new BMenuItem(label, message));
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 OakWindow::OakWindow( BRect rect ) 
 	: BWindow(rect , "", B_DOCUMENT_WINDOW, B_QUIT_ON_WINDOW_CLOSE)
 {
@@ -109,11 +115,8 @@ OakWindow::OakWindow( BRect rect )
 	BMenuItem *menuFileAbout = new BMenuItem("About Tororu"
 		B_UTF8_ELLIPSIS, new BMessage(FILE_ABOUT), 0);
 	menuFile->AddItem(menuFileAbout);
-	BMenuItem *menuFileDemo = new BMenuItem("Some demo"
-		B_UTF8_ELLIPSIS, new BMessage(FILE_DEMO), 0);
-	menuFile->AddItem(menuFileDemo);
-	BMenuItem *menuFileClose = new BMenuItem("Close", new BMessage(FILE_CLOSE), 'Q');
-	menuFile->AddItem(menuFileClose);
+	BMenuItem *menuFileQuit = new BMenuItem("Quit", new BMessage(FILE_QUIT), 'Q');
+	menuFile->AddItem(menuFileQuit);
 	BMenu *menuEdit = new BMenu("Edit");
 	BMenu *menuGo = new BMenu("Go");
 	menuGo->AddItem(new BMenuItem("Back", new BMessage(HISTORY_BACK), B_LEFT_ARROW));
@@ -188,6 +191,15 @@ OakWindow::OakWindow( BRect rect )
 	menuViewCharset->AddItem(ch);
 
 	menuView->AddItem(menuViewCharset);
+
+	BMenu *menuGengo = new BMenu("Gengo");
+	AddGengoHelpItem(menuGengo, "Overview", "about:gengo");
+	AddGengoHelpItem(menuGengo, "Language guide", "about:gengo-language");
+	AddGengoHelpItem(menuGengo, "Haiku integration", "about:gengo-haiku");
+	AddGengoHelpItem(menuGengo, "HTML and DOM", "about:gengo-html");
+	AddGengoHelpItem(menuGengo, "Security and capabilities", "about:gengo-security");
+	AddGengoHelpItem(menuGengo, "Example application", "about:gengo-example");
+	menubar->AddItem(menuGengo);
 	
 	menuDebug = new BMenu("Debug");
 	menuDebug->AddItem(new BMenuItem("Show borders", new BMessage(DEBUG_BORDERS)));
@@ -283,7 +295,7 @@ bool OakWindow::QuitRequested()
 }
 
 void OakWindow::MessageReceived( BMessage *message ) {
-	const char *bmname, *bmpath, *family;
+	const char *bmname, *bmpath, *family, *gengoUrl;
 	BString url, url2;
 	OakAboutWindow *oaw;
 	int i;
@@ -394,11 +406,12 @@ void OakWindow::MessageReceived( BMessage *message ) {
 	case FILE_ABOUT:
 		oaw = new OakAboutWindow();
 		break;
-	case FILE_DEMO:
-		new OakDemoWindow();
+	case FILE_QUIT:
+		be_app->PostMessage(B_QUIT_REQUESTED);
 		break;
-	case FILE_CLOSE:
-		Quit();
+	case GENGO_HELP:
+		if (message->FindString("url", &gengoUrl) == B_OK)
+			ftview->LoadFile(gengoUrl);
 		break;
 	case MENU_BOOKMARK_MANAGE:
 	{

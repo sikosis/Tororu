@@ -35,7 +35,7 @@ APP_MIME_SIG= application/x-vnd.sikosis-Tororu
 #	are included from different directories.  Also note that spaces
 #	in folder names do not work well with this makefile.
 SRCS= FTView.cpp Oak.cpp OakAboutWindow.cpp OakAnchor.cpp \
-OakBookmark.cpp OakButton.cpp OakDemoWindow.cpp OakHistory.cpp \
+OakBookmark.cpp OakButton.cpp OakHistory.cpp \
 OakImage.cpp OakLink.cpp OakSearch.cpp OakTabView.cpp OakVBar.cpp \
 OakView.cpp OakWindow.cpp OakWord.cpp
 

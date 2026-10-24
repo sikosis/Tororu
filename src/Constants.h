@@ -2,7 +2,7 @@
 #define _CONSTANTS_H_
 
 const char *const APP_SIGNATURE = "application/x-vnd.sikosis-Tororu";
-const char *const APP_VERSION = "0.15";
+const char *const APP_VERSION = "0.16";
 const char *const SETTINGS_DIRECTORY = "/boot/home/config/settings/Tororu";
 const char *const BOOKMARKS_DIRECTORY = "/boot/home/config/settings/Tororu/Bookmarks";
 
@@ -21,15 +21,13 @@ const uint32 EDIT_SEARCHNEXT = 			'EdSn';
 const uint32 VIEW_FULLSCREEN =			'ViFs';
 const uint32 VIEW_CHARSET =				'ViCh';
 const uint32 FILE_ABOUT =				'FiAb';
-const uint32 FILE_DEMO =				'FiDm';
-const uint32 FILE_CLOSE =				'FiCl';
+const uint32 FILE_QUIT =				'FiQt';
+const uint32 GENGO_HELP =				'GnHp';
 const uint32 SET_FONT =					'StFn';
 const uint32 DEBUG_BORDERS = 			'DbBr';
 const uint32 DEBUG_DONTUSEBUFFER = 		'DbDu';
 const uint32 DEBUG_USEBUFFER = 			'DbUb';
 const uint32 DEBUG_HIDEPICTURES = 		'DbHp';
-
-const uint32 DEMO_EDITED =				'DmEd';
 
 const uint32 FILEPANEL_OPEN =			'FPop';
 const uint32 HISTORY_BACK =				'HsBk';

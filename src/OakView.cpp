@@ -2746,6 +2746,8 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			system = true;
 		else if (strcmp(fname2, "about:home") == 0)
 			system = true;
+		else if (strncmp(fname2, "about:gengo", 11) == 0)
+			system = true;
 	}
 
 	if (fname2 != NULL)
@@ -2814,6 +2816,12 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 		{
 			InitHome();
 			filename->SetTo("about:home");
+			path->SetTo("");
+		}
+		else if (fn2.Compare("about:gengo", 11) == 0)
+		{
+			InitGengo(fn2.String());
+			filename->SetTo(fn2);
 			path->SetTo("");
 		}
 		else
@@ -3490,6 +3498,65 @@ void OakView::InitHome() {
 	ScanAndAddHtml(BOOKMARKS_DIRECTORY, html);
 	
 	html->Append("");
+	html->Append("</body></html>");
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void OakView::InitGengo(const char *page) {
+	html->SetTo("<html><head><title>Gengo Help</title></head>"
+		"<body bgcolor=\"#336698\" text=\"#ffffff\" link=\"#c0d8f0\">"
+		"<font size=\"+4\"><b>Gengo</b></font><br>"
+		"<font color=\"#d0e0f0\">Tororu's Haiku-native scripting language</font><hr>"
+		"<a href=\"about:gengo\">Overview</a> | "
+		"<a href=\"about:gengo-language\">Language</a> | "
+		"<a href=\"about:gengo-haiku\">Haiku</a> | "
+		"<a href=\"about:gengo-html\">HTML and DOM</a> | "
+		"<a href=\"about:gengo-security\">Security</a> | "
+		"<a href=\"about:gengo-example\">Example</a><hr>");
+
+	if (strcmp(page, "about:gengo-language") == 0) {
+		html->Append("<font size=\"+2\"><b>Language guide</b></font><br><br>"
+			"Gengo is a small, readable language with UTF-8 source, lexical scope, "
+			"closures, structured errors and no implicit globals.<br><br>"
+			"<b>Values</b><br>nil, bool, int, num, str, what, list, map, fn and native handle.<br><br>"
+			"<b>Control flow</b><br>if and else, for and while loops, match, try and catch.<br><br>"
+			"<b>Modules</b><br>Built-in modules and local .gengo files are imported with use."
+			" File modules remain inside the application folder.");
+	} else if (strcmp(page, "about:gengo-haiku") == 0) {
+		html->Append("<font size=\"+2\"><b>Haiku integration</b></font><br><br>"
+			"Gengo maps convert directly to BMessages. Four-character message codes, "
+			"messaging targets and asynchronous replies are first-class features.<br><br>"
+			"Planned modules cover Haiku scripting suites, BFS attributes and queries, "
+			"node monitoring, the roster, clipboard and notifications.");
+	} else if (strcmp(page, "about:gengo-html") == 0) {
+		html->Append("<font size=\"+2\"><b>HTML and DOM-lite</b></font><br><br>"
+			"Pages will load .gengo scripts and bind declarative events to named "
+			"functions. A deliberately small DOM API will expose addressable elements, "
+			"text, values, attributes and event handlers.<br><br>"
+			"Each page owns one interpreter and processes UI events on its looper thread.");
+	} else if (strcmp(page, "about:gengo-security") == 0) {
+		html->Append("<font size=\"+2\"><b>Security and capabilities</b></font><br><br>"
+			"Scripts have no ambient authority. File access, application launching, "
+			"messaging and other sensitive operations require declared capabilities.<br><br>"
+			"Gengo will not provide network access, arbitrary eval, native extension "
+			"loading or a just-in-time compiler in the initial releases.");
+	} else if (strcmp(page, "about:gengo-example") == 0) {
+		html->Append("<font size=\"+2\"><b>Example application</b></font><br><br>"
+			"The draft specification describes a small notes application built from "
+			"HTML, Gengo and native Haiku services. It exercises DOM events, file I/O, "
+			"BFS attributes, application state and error handling.<br><br>"
+			"This example will become a framework milestone after libtororu and the "
+			"native host API are established.");
+	} else {
+		html->Append("<font size=\"+2\"><b>Overview</b></font><br><br>"
+			"Gengo is the planned scripting language for Tororu. It fills the role that "
+			"JavaScript fills in browser frameworks while remaining small, safe and "
+			"shaped around Haiku.<br><br>"
+			"The current specification is a draft. Gengo may grow into an independent "
+			"project while Tororu consumes it through the framework's action and event boundary.");
+	}
+
 	html->Append("</body></html>");
 }
 //---------------------------------------------------------------------------------------------------------------------------------//

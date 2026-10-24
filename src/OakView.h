@@ -309,6 +309,7 @@ public:
 	void InitBlank();
 	void InitAbout();
 	void InitHome();
+	void InitGengo(const char *page);
 	void SelectAll();
 	void Search( const char *s, bool again = false );
 	void ToClipboard();
