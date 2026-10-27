@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Tororu renderer smoke test</title>
+</head>
+<body bgcolor="#336698" text="#ffffff" link="#ffff00">
+<h1>Tororu renderer smoke test</h1>
+<p>This page exercises the documented local HTML subset.</p>
+
+<hr color="#ffffff">
+<h2>Text</h2>
+<p><b>Bold</b> <i>italic</i> <u>underlined</u> <tt>monospace</tt>
+and superscript<sup>2</sup>.</p>
+<font size="+1" color="#ffff00">Larger yellow text</font>
+<blockquote>A blockquote should be indented.</blockquote>
+<pre>Preformatted text
+  keeps indentation.</pre>
+
+<h2>List and navigation</h2>
+<ul>
+<li>First item</li>
+<li>Second item</li>
+</ul>
+<a href="#target">Jump to the anchor below</a>
+
+<h2>Table</h2>
+<table width="100%" border="1" cellpadding="4" bgcolor="#4376a8">
+<tr><td><b>Feature</b></td><td><b>Expected result</b></td></tr>
+<tr><td>Two columns</td><td align="center">Centred cell</td></tr>
+<tr><td colspan="2" bgcolor="#336698">A cell spanning both columns</td></tr>
+</table>
+
+<h2>Local image</h2>
+<img src="../../src/images/haikulogo" alt="Haiku logo">
+
+<hr color="#ffffff">
+<a name="target"></a>
+<h3>Anchor target</h3>
+<p>If this section moved into view, fragment navigation works.</p>
+</body>
+</html>

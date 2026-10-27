@@ -38,68 +38,65 @@ bool SetFamily( BFont *font, const char *s, bool prim )
 	return false;
 }
 
-void ParseTag( BString str, BString *lex, BString *value, int *col )
-{
+void ParseTag(BString str, BString *lex, BString *value, int capacity, int *col) {
 	int i = 0;
-	bool quote;
-	
-	if (str.ByteAt(0) == '<')
-	{
-		while (str.ByteAt(0) != ' ' && str.ByteAt(0) != '>' &&
-			str.Length() > 0)
+	*col = 0;
+
+	if (capacity <= 0 || str.Length() == 0 || str.ByteAt(0) != '<')
+		return;
+
+	while (str.Length() > 0 && str.ByteAt(0) != ' ' &&
+		str.ByteAt(0) != '>')
+		str.Remove(0, 1);
+
+	while (str.Length() > 0 && str.ByteAt(0) == ' ')
+		str.Remove(0, 1);
+
+	while (str.Length() > 0 && str.ByteAt(0) != '>' && i < capacity) {
+		lex[i].SetTo("");
+		value[i].SetTo("");
+
+		while (str.Length() > 0 && str.ByteAt(0) != '=' &&
+			str.ByteAt(0) != ' ' && str.ByteAt(0) != '>') {
+			lex[i].Append(str.ByteAt(0), 1);
 			str.Remove(0, 1);
-
-		while (str.ByteAt(0) == ' ' && str.Length() > 0)
-			str.Remove(0, 1);
-
-		while (str.ByteAt(0) != '>' && str.Length() > 0)
-		{
-			lex[i].SetTo("");
-			value[i].SetTo("");
-			while (str.ByteAt(0) != '>' && str.ByteAt(0) != ' ' && str.Length() > 0)
-			{
-				if (str.ByteAt(0) == '=')
-				{
-					str.Remove(0, 1);
-					while (str.ByteAt(0) == ' ')
-						str.Remove(0, 1);
-					quote = false;
-					while ((!quote && str.ByteAt(0) != '>' &&
-						str.ByteAt(0) != ' ' &&	str.Length() > 0) ||
-						(quote && str.ByteAt(0) != '"' &&
-						str.Length() > 0))
-					{
-						if (str.ByteAt(0) == '"')
-							quote = true;
-						else
-							value[i].Append(str.ByteAt(0), 1);
-						str.Remove(0, 1);
-					}
-					if (quote && str.ByteAt(0) == '"')
-						str.Remove(0, 1);
-						//printf("> Parse:: '%s'\n", value[i].String());
-				}
-				else if (str.ByteAt(0) != ' ')
-				{
-					lex[i].Append(str.ByteAt(0), 1);
-					str.Remove(0, 1);
-
-					if (str.ByteAt(0) == ' ' && str.ByteAt(1) == '=')
-					while (str.ByteAt(0) == ' ')
-						str.Remove(0, 1);
-				}
-				else
-				{
-					str.Remove(0, 1);
-				}
-			}
-			while (str.ByteAt(0) != '>' && str.ByteAt(0) == ' ' && str.Length() > 0)
-				str.Remove(0, 1);
-			i++;
 		}
+
+		while (str.Length() > 0 && str.ByteAt(0) == ' ')
+			str.Remove(0, 1);
+
+		if (str.Length() > 0 && str.ByteAt(0) == '=') {
+			str.Remove(0, 1);
+			while (str.Length() > 0 && str.ByteAt(0) == ' ')
+				str.Remove(0, 1);
+
+			char quote = 0;
+			if (str.Length() > 0 &&
+				(str.ByteAt(0) == '"' || str.ByteAt(0) == '\'')) {
+				quote = str.ByteAt(0);
+				str.Remove(0, 1);
+			}
+
+			while (str.Length() > 0 &&
+				((quote != 0 && str.ByteAt(0) != quote) ||
+				(quote == 0 && str.ByteAt(0) != ' ' &&
+				str.ByteAt(0) != '>'))) {
+				value[i].Append(str.ByteAt(0), 1);
+				str.Remove(0, 1);
+			}
+
+			if (quote != 0 && str.Length() > 0 && str.ByteAt(0) == quote)
+				str.Remove(0, 1);
+		}
+
+		while (str.Length() > 0 && str.ByteAt(0) == ' ')
+			str.Remove(0, 1);
+		i++;
 	}
 	*col = i;
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 
 void GetRgbFromString( BString s, rgb_color *rgb )
 {
@@ -2081,7 +2078,7 @@ void OakView::Process()
 {
 	char *mas, *m, *catch_m;
 	bool istag, settitle = false, setbody = false, pre = false, isme = false;
-	BString str, flname, lex[10], val[10], s, anchor;
+	BString str, flname, lex[MAX_TAG_ATTRIBUTES], val[MAX_TAG_ATTRIBUTES], s, anchor;
 	//BDirectory dir;
 	BPath pth;
 	int i, k, col;
@@ -2310,7 +2307,7 @@ void OakView::Process()
 				if (str.ICompare("<body ", 6) == 0 || str.ICompare("<body>", 6) == 0)
 				{
 					sethead = false;
-					ParseTag(str, lex, val, &col);
+					ParseTag(str, lex, val, MAX_TAG_ATTRIBUTES, &col);
 					GetRgbFromString("#c0c0c0", &bgcolor);
 					k = 0;
 					while (k < col)
@@ -2349,7 +2346,7 @@ void OakView::Process()
 				{
 					flname.SetTo("");
 				
-					ParseTag(str, lex, val, &col);
+					ParseTag(str, lex, val, MAX_TAG_ATTRIBUTES, &col);
 					k = 0;
 					while (k < col)
 					{
@@ -2408,7 +2405,7 @@ void OakView::Process()
 						TABLE->tdcanresize[k] = true;
 					}
 
-					ParseTag(str, lex, val, &col);
+					ParseTag(str, lex, val, MAX_TAG_ATTRIBUTES, &col);
 					k = 0;
 					while (k < col)
 					{
@@ -2479,7 +2476,7 @@ void OakView::Process()
 					
 					TABLE->td[TABLE->tds] = new OakTD();
 					
-					ParseTag(str, lex, val, &col);
+					ParseTag(str, lex, val, MAX_TAG_ATTRIBUTES, &col);
 					k = 0;
 					while (k < col)
 					{
@@ -2730,7 +2727,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 	char *mas, *mas2, fname[255];
 	off_t length;
 	bool isme = false;
-	BString str, flname, lex[10], val[10], s, anchor;
+	BString str, flname, s, anchor;
 	//BDirectory dir;
 	BPath pth;
 	int i;

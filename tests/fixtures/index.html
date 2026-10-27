@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Tororu renderer test suite</title>
+</head>
+<body bgcolor="#336698" text="#ffffff" link="#ffff00">
+<h1>Tororu renderer test suite</h1>
+<p>Run this suite on Haiku and inspect each linked fixture.</p>
+
+<table width="100%" border="1" cellpadding="4" bgcolor="#4376a8">
+<tr><td><b>Fixture</b></td><td><b>Check</b></td></tr>
+<tr>
+<td><a href="renderer-smoke.html">Renderer smoke test</a></td>
+<td>Text, lists, anchors, tables, colours and a local image render without overlap.</td>
+</tr>
+<tr>
+<td><a href="many-attributes.html">Attribute bounds regression</a></td>
+<td>A tag-like span with more than 20 tokens is safely truncated and does not crash.</td>
+</tr>
+</table>
+
+<h2>Pass criteria</h2>
+<ul>
+<li>The page title appears in the Tororu window tab.</li>
+<li>Every labelled section is visible.</li>
+<li>The table has two aligned columns and one spanning cell.</li>
+<li>The Haiku image loads below the table.</li>
+<li>The fragment link scrolls to its anchor.</li>
+<li>Back returns to this index and Forward reopens the fixture.</li>
+<li>The attribute bounds fixture reaches its PASS line without closing Tororu.</li>
+</ul>
+</body>
+</html>

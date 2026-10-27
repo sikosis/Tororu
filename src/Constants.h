@@ -2,7 +2,7 @@
 #define _CONSTANTS_H_
 
 const char *const APP_SIGNATURE = "application/x-vnd.sikosis-Tororu";
-const char *const APP_VERSION = "0.18";
+const char *const APP_VERSION = "0.19";
 const char *const SETTINGS_DIRECTORY = "/boot/home/config/settings/Tororu";
 const char *const BOOKMARKS_DIRECTORY = "/boot/home/config/settings/Tororu/Bookmarks";
 

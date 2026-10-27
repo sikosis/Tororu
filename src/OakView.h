@@ -29,7 +29,7 @@
 #include "OakWord.h"
 #include "OakHistory.h"
 
-void ParseTag( BString str, BString *lex, BString *value, int *col );
+void ParseTag(BString str, BString *lex, BString *value, int capacity, int *col);
 
 bool SetFamily( BFont *font, const char *s, bool prim = true );
 
@@ -188,19 +188,20 @@ public:
 		BString(s)
 	{
 		//printf("RECEIVED (%s)\n", s);
+		col = 0;
 
-		if (s[0] == '<')
+		if (s != NULL && s[0] == '<')
 			is_tag = true;
 		else
 			is_tag = false;
 		
 		if (is_tag)
 		{
-			lex = new BString[20];
-			val = new BString[20];
+			lex = new BString[MAX_TAG_ATTRIBUTES];
+			val = new BString[MAX_TAG_ATTRIBUTES];
 			if (FindFirst("<!--") == -1)
 			{
-				ParseTag(BString(s), lex, val, &col);
+				ParseTag(BString(s), lex, val, MAX_TAG_ATTRIBUTES, &col);
 				RemoveFirst("<");
 				if (FindFirst(">") != -1)
 					Truncate(FindFirst(">"));
@@ -214,6 +215,9 @@ public:
 		}
 		strw = 0;
 	}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 	~OakLexem()
 	{
 		if (is_tag)

@@ -31,5 +31,6 @@ const int32 MAX_LEXEMS = 100000;
 const int32 MAX_LINES = 30000;
 const int32 MAX_COLS = 30;
 const int32 MAX_ROWS = 200;
+const int32 MAX_TAG_ATTRIBUTES = 20;
 
 #endif

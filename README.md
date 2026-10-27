@@ -1,7 +1,7 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.18-f5a623" alt="Version v0.18">
+  <img src="https://img.shields.io/badge/version-v0.19-f5a623" alt="Version v0.19">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
@@ -19,7 +19,7 @@ the framework.
 
 ## Current status
 
-Version v0.18 establishes the Tororu source tree from the preserved
+Version v0.19 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.
@@ -32,6 +32,9 @@ Tororu currently supports:
 - in-page text search;
 - built-in Gengo language help;
 - basic HTML text, links, images, tables, and character-set conversion.
+
+The exact compatibility baseline and manual rendering fixture are documented
+in [`docs/HTML_SUPPORT.md`](docs/HTML_SUPPORT.md).
 
 ## Project goals
 
@@ -73,8 +76,8 @@ Legend: ✅ complete · 🚧 active · ○ planned
   - [x] Establish the Tororu application identity, versioning, and build.
   - [x] Embed browser artwork so the application launches independently.
 - [ ] **Stage 1 — Stabilise and test the renderer**
-  - [ ] Record the currently supported HTML behaviour.
-  - [ ] Add representative rendering fixtures and repeatable smoke tests.
+  - [x] Record the currently supported HTML behaviour.
+  - [x] Add representative rendering fixtures and repeatable smoke tests.
   - [ ] Cover malformed input, missing files, limits, and failure paths.
   - [ ] Remove renderer crashes, leaks, and unsafe fixed-size assumptions.
 - [ ] **Stage 2 — Extract `libtororu`**

@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Tororu attribute bounds regression</title>
+</head>
+<body bgcolor="#336698" text="#ffffff">
+<h1>Attribute bounds regression</h1>
+<p data-01="1" data-02="2" data-03="3" data-04="4" data-05="5"
+data-06="6" data-07="7" data-08="8" data-09="9" data-10="10"
+data-11="11" data-12="12" data-13="13" data-14="14" data-15="15"
+data-16="16" data-17="17" data-18="18" data-19="19" data-20="20"
+data-21="21" data-22="22" data-23="23" data-24="24" data-25="25">
+This paragraph has more attributes than Tororu retains. It must render without
+overwriting the parser's fixed attribute storage.</p>
+
+<script>
+for (var i = 0; i < arguments.length; i++) {
+    var ignored = "one two three four five six seven eight nine ten eleven " +
+        "twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen " +
+        "twenty twenty-one twenty-two twenty-three twenty-four twenty-five";
+}
+</script>
+
+<p><b>PASS:</b> Tororu remained open and displayed this line.</p>
+</body>
+</html>

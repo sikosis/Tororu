@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.19
+
+- Bounded HTML tag attribute parsing to prevent memory corruption when modern
+  markup or script text contains more tokens than the legacy renderer retains.
+- Added a regression fixture covering tags and tag-like script spans with more
+  than 20 attributes.
+
 ## v0.18
 
 - Added a high-resolution Tororu icon with Haiku-native window styling.
