@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.19"' src/Constants.h \
+grep -q 'APP_VERSION = "0.2"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.19-' README.md || fail 'README version is incorrect'
-grep -q 'middle = 1,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 9,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'version-v0.2-' README.md || fail 'README version is incorrect'
+grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
+grep -q 'minor  = 0,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -33,10 +33,14 @@ test -f tests/fixtures/index.html || fail 'renderer fixture index is missing'
 test -f tests/fixtures/renderer-smoke.html || fail 'renderer smoke fixture is missing'
 test -f tests/fixtures/many-attributes.html \
 	|| fail 'attribute bounds regression fixture is missing'
+test -f tests/fixtures/table-limits.html \
+	|| fail 'table limits regression fixture is missing'
 grep -q 'renderer-smoke.html' tests/fixtures/index.html \
 	|| fail 'renderer fixture is not linked from the test index'
 grep -q 'many-attributes.html' tests/fixtures/index.html \
 	|| fail 'attribute bounds fixture is not linked from the test index'
+grep -q 'table-limits.html' tests/fixtures/index.html \
+	|| fail 'table limits fixture is not linked from the test index'
 grep -q '^smoke:' Makefile || fail 'smoke test Make target is missing'
 grep -q 'MAX_TAG_ATTRIBUTES' src/OakView.cpp \
 	|| fail 'tag parser is not bounded by the attribute limit'
@@ -45,6 +49,20 @@ grep -q 'i < capacity' src/OakView.cpp \
 attribute_count=$(grep -o 'data-[0-9][0-9]=' tests/fixtures/many-attributes.html | wc -l | tr -d ' ')
 test "$attribute_count" -eq 25 \
 	|| fail 'attribute bounds fixture does not exceed the parser capacity'
+table_depth_count=$(grep -o '<table' tests/fixtures/table-limits.html | wc -l | tr -d ' ')
+test "$table_depth_count" -gt 20 \
+	|| fail 'table limits fixture does not exceed the nesting limit'
+grep -q 'MAX_TABLE_CELLS' src/OakView.cpp \
+	|| fail 'table cell storage is not bounded'
+grep -q 'MAX_TABLE_DEPTH' src/OakView.cpp \
+	|| fail 'table nesting is not bounded'
+if grep -q '^[[:space:]]*n_lexems++;' src/OakView.cpp; then
+	fail 'lexeme count advances separately from insertion'
+fi
+grep -q 'n_tables = 0;' src/OakView.cpp \
+	|| fail 'table collection is not initialised'
+grep -q 'n_lexems = 0;' src/OakView.cpp \
+	|| fail 'lexeme collection is not initialised'
 
 for element in h1 h2 p b i u tt sup font blockquote pre ul li a table tr td img hr; do
 	grep -qi "<$element" tests/fixtures/renderer-smoke.html \

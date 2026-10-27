@@ -16,6 +16,10 @@
 <td><a href="many-attributes.html">Attribute bounds regression</a></td>
 <td>A tag-like span with more than 20 tokens is safely truncated and does not crash.</td>
 </tr>
+<tr>
+<td><a href="table-limits.html">Table limits regression</a></td>
+<td>Oversized spans, excess columns and excessive nesting do not overrun renderer storage.</td>
+</tr>
 </table>
 
 <h2>Pass criteria</h2>
@@ -27,6 +31,7 @@
 <li>The fragment link scrolls to its anchor.</li>
 <li>Back returns to this index and Forward reopens the fixture.</li>
 <li>The attribute bounds fixture reaches its PASS line without closing Tororu.</li>
+<li>The table limits fixture reaches its PASS line without closing Tororu.</li>
 </ul>
 </body>
 </html>

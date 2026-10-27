@@ -66,7 +66,7 @@ public:
 	int tr_pos;
 	bool border;
 	int tdwidths[MAX_COLS];
-	OakTD *td[3000];
+	OakTD *td[MAX_TABLE_CELLS];
 	int tds;
 	int offset;
 	int aoffset;
@@ -90,6 +90,13 @@ public:
 	
 	OakTable() { tds = 0; cols = 0; rows = 0; border = false; td_pos = -1; tr_pos = -1;
 		width = 0; is_bgcolor = false; canresize = true; created = false; }
+	~OakTable() {
+		for (int i = 0; i < tds; i++)
+			delete td[i];
+	}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 	bool canresize;
 	
 	BRect rect( int pos = -1 )

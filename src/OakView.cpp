@@ -185,6 +185,8 @@ OakView::OakView( BRect r,  const char *name, class FTView *daddy) : BView(r, na
 	n_links = 0;
 	n_anchors = 0;
 	n_words = 0;
+	n_tables = 0;
+	n_lexems = 0;
 	n_history = 0;
 	pos_history = 0;
 	
@@ -270,6 +272,9 @@ OakView::OakView( BRect r,  const char *name, class FTView *daddy) : BView(r, na
 	hand_cursor = new BCursor(mas);
 	free(mas);
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 
 OakView::~OakView()
 {
@@ -291,12 +296,19 @@ OakView::~OakView()
 		delete anchors[i];
 	for (i32 = 0; i32 < n_words; i32++)
 		delete words[i32];
+	for (i = 0; i < n_tables; i++)
+		delete tables[i];
+	for (i = 0; i < n_lexems; i++)
+		delete lexems[i];
 
 	if (cache != NULL)
 		delete cache;
 	if (bg != NULL)
 		delete bg;
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 
 void OakView::MyDraw( uint32 p = OAK_DRAW )
 {
@@ -361,7 +373,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 		int table_pos = 0, table_pos2 = -1;
 		static BRect table_rects[MAX_TABLES];
 		int tdw = 0, trh;
-		int table_number[20];
+		int table_number[MAX_TABLE_DEPTH];
 		bool td_is = false;
 		int right = (int)Bounds().right;
 		bool br = false, nobr = false;
@@ -1297,7 +1309,10 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 						br_left_to = -1;
 						br_right_to = -1;
 						br_reset = false;
-						if (i != aoffset)
+						if (table_pos >= n_tables ||
+							table_pos2 + 1 >= MAX_TABLE_DEPTH) {
+							nextlex = true;
+						} else if (i != aoffset)
 						{
 							br = true;
 							nextlex = false;
@@ -1319,7 +1334,8 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 							if (table_pos2 > 0)
 							{
 								OakTable *TT = tables[table_number[table_pos2 - 1]];
-								if (TT->td[TT->td_pos]->is_bgcolor)
+								if (TT->td_pos >= 0 && TT->td_pos < TT->tds &&
+									TT->td[TT->td_pos]->is_bgcolor)
 								{
 									TABLE->pbgcolor.red = TT->td[TT->td_pos]->bgcolor.red;
 									TABLE->pbgcolor.green = TT->td[TT->td_pos]->bgcolor.green;
@@ -1632,7 +1648,10 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 						if (table_pos2 > -1)
 						{
 							TABLE = tables[table_number[table_pos2]];
-							TD = TABLE->td[TABLE->td_pos];
+							if (TABLE->td_pos >= 0 && TABLE->td_pos < TABLE->tds)
+								TD = TABLE->td[TABLE->td_pos];
+							else
+								TD = NULL;
 
 						}
 						
@@ -2065,6 +2084,9 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 	}
 	//delete bb;
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 
 void OakView::Draw( BRect ur )
 {
@@ -2097,9 +2119,9 @@ void OakView::Process()
 	
 	searched = -1;
 	
-	n_tables = 0;
 	int table_pos2 = -1;
-	int table_number[20];
+	int table_number[MAX_TABLE_DEPTH];
+	int ignored_table_depth = 0;
 	
 	vl_tables = -1;
 	
@@ -2380,16 +2402,31 @@ void OakView::Process()
 				}
 
 				// TABLES
-				
+				bool table_start = str.ICompare("<table ", 7) == 0 ||
+					str.ICompare("<table>") == 0;
+				bool table_end = str.ICompare("</table>") == 0;
+				bool table_tag_ignored = false;
+
 				if (table_pos2 > -1)
 					TABLE = tables[table_number[table_pos2]];
+
+				if (ignored_table_depth > 0) {
+					if (table_start)
+						ignored_table_depth++;
+					else if (table_end)
+						ignored_table_depth--;
+					if (str.ByteAt(0) == '<')
+						str.SetTo("");
+					table_tag_ignored = true;
+				} else if (table_start && (n_tables >= MAX_TABLES ||
+					table_pos2 + 1 >= MAX_TABLE_DEPTH)) {
+					ignored_table_depth = 1;
+					str.SetTo("");
+					table_tag_ignored = true;
+				}
 				
-				if (str.ICompare("<table ", 7) == 0 || str.ICompare("<table>") == 0)
-				{
+				if (!table_tag_ignored && table_start) {
 					pred_cols = 0;
-					
-					if (n_tables > MAX_TABLES)
-						printf("> Karaul! tablic ne hvataet :(\n");
 					table_pos2++;
 	
 					table_number[table_pos2] = n_tables++;
@@ -2409,7 +2446,7 @@ void OakView::Process()
 					k = 0;
 					while (k < col)
 					{
-						if (lex[k].ICompare("width") == 0)
+						if (lex[k].ICompare("width") == 0 && val[k].Length() > 0)
 						{
 							if (val[k].ByteAt(val[k].Length() - 1) != '%')
 							{
@@ -2445,42 +2482,46 @@ void OakView::Process()
 					}
 					
 					tdbegin = false;
-				}
-				else if (str.ICompare("<tr ", 3) == 0 || str.ICompare("<tr>") == 0 ||
-					str.ICompare("<th ", 3) == 0 || str.ICompare("<th>") == 0)
+				} else if (!table_tag_ignored && table_pos2 > -1 && TABLE != NULL &&
+					(str.ICompare("<tr ", 3) == 0 || str.ICompare("<tr>") == 0 ||
+					str.ICompare("<th ", 3) == 0 || str.ICompare("<th>") == 0))
 				{
+					if (TABLE->rows >= MAX_ROWS) {
+						str.SetTo("");
+						tdbegin = false;
+					} else {
+						if (tdbegin && n_lexems < MAX_LEXEMS)
+							lexems[n_lexems++] = new OakLexem("</td>");
 
-					if (tdbegin)
-					{
-						if (n_lexems < MAX_LEXEMS)
-							lexems[n_lexems] = new OakLexem("</td>");
-						n_lexems++;
-					}
-
-					if (TABLE->rows > -1 && pred_cols < TABLE->cols)
-						pred_cols = TABLE->cols;
-					TABLE->cols = 0;
-					TABLE->rows++;
-				}
-				else if (str.ICompare("<td ", 3) == 0 || str.ICompare("<td>") == 0)
-				{
-					if (TABLE->rows == 0)
+						if (TABLE->rows > -1 && pred_cols < TABLE->cols)
+							pred_cols = TABLE->cols;
+						TABLE->cols = 0;
 						TABLE->rows++;
-					
-					if (tdbegin)
-					{
-						if (n_lexems < MAX_LEXEMS)
-							lexems[n_lexems] = new OakLexem("</td>");
-						n_lexems++;
 					}
+				}
+				else if (!table_tag_ignored && table_pos2 > -1 && TABLE != NULL &&
+					(str.ICompare("<td ", 3) == 0 || str.ICompare("<td>") == 0))
+				{
+					if (TABLE->rows > MAX_ROWS || TABLE->tds >= MAX_TABLE_CELLS ||
+						TABLE->cols >= MAX_COLS) {
+						str.SetTo("");
+						tdbegin = false;
+					} else {
+						if (TABLE->rows == 0)
+							TABLE->rows++;
 					
-					TABLE->td[TABLE->tds] = new OakTD();
+						if (tdbegin) {
+							if (n_lexems < MAX_LEXEMS)
+							lexems[n_lexems++] = new OakLexem("</td>");
+						}
+					
+						TABLE->td[TABLE->tds] = new OakTD();
 					
 					ParseTag(str, lex, val, MAX_TAG_ATTRIBUTES, &col);
 					k = 0;
 					while (k < col)
 					{
-						if (lex[k].ICompare("width") == 0)
+						if (lex[k].ICompare("width") == 0 && val[k].Length() > 0)
 						{
 							if (val[k].ByteAt(val[k].Length() - 1) != '%')
 							{
@@ -2502,6 +2543,9 @@ void OakView::Process()
 								&TABLE->td[TABLE->tds]->colspan);
 							if (TABLE->td[TABLE->tds]->colspan <= 0)
 								TABLE->td[TABLE->tds]->colspan = 1;
+							if (TABLE->td[TABLE->tds]->colspan >
+								MAX_COLS - TABLE->cols)
+								TABLE->td[TABLE->tds]->colspan = MAX_COLS - TABLE->cols;
 						}
 						else if (lex[k].ICompare("rowspan") == 0)
 						{
@@ -2509,6 +2553,9 @@ void OakView::Process()
 								&TABLE->td[TABLE->tds]->rowspan);
 							if (TABLE->td[TABLE->tds]->rowspan <= 0)
 								TABLE->td[TABLE->tds]->rowspan = 1;
+							if (TABLE->td[TABLE->tds]->rowspan >
+								MAX_ROWS - TABLE->rows + 1)
+								TABLE->td[TABLE->tds]->rowspan = MAX_ROWS - TABLE->rows + 1;
 						}
 						else if (lex[k].ICompare("align") == 0)
 						{
@@ -2553,17 +2600,27 @@ void OakView::Process()
 					for (k = 0; k < TABLE->tds; k++)
 						if (TABLE->td[k]->col == TABLE->cols && TABLE->td[k]->width != -1)
 							TABLE->td[TABLE->tds]->canresize = false;
-	
-	
-					TABLE->td[TABLE->tds]->col = TABLE->cols;
-					TABLE->td[TABLE->tds]->row = TABLE->rows - 1;
 
-					TABLE->cols += TABLE->td[TABLE->tds]->colspan;
+					if (TABLE->cols >= MAX_COLS) {
+						TABLE->cols = MAX_COLS;
+						delete TABLE->td[TABLE->tds];
+						TABLE->td[TABLE->tds] = NULL;
+						str.SetTo("");
+						tdbegin = false;
+					} else {
+						if (TABLE->td[TABLE->tds]->colspan > MAX_COLS - TABLE->cols)
+							TABLE->td[TABLE->tds]->colspan = MAX_COLS - TABLE->cols;
+						TABLE->td[TABLE->tds]->col = TABLE->cols;
+						TABLE->td[TABLE->tds]->row = TABLE->rows - 1;
 
-					if (!TABLE->td[TABLE->tds]->canresize)
-						TABLE->tdcanresize[TABLE->cols - 1] = false;
+						TABLE->cols += TABLE->td[TABLE->tds]->colspan;
 
-					TABLE->tds++;
+						if (!TABLE->td[TABLE->tds]->canresize)
+							TABLE->tdcanresize[TABLE->cols - 1] = false;
+
+						TABLE->tds++;
+					}
+					}
 				}
 				else if (str.ICompare("</td>", 4) == 0)
 				{
@@ -2575,10 +2632,9 @@ void OakView::Process()
 					{
 						if (n_lexems < MAX_LEXEMS)
 						{
-							lexems[n_lexems] = new OakLexem("</td>");
+							lexems[n_lexems++] = new OakLexem("</td>");
 							tdbegin = false;
 						}
-						n_lexems++;
 					}
 				}
 				else if (table_pos2 > -1 && str.ICompare("</table>") == 0)
@@ -2587,10 +2643,9 @@ void OakView::Process()
 					{
 						if (n_lexems < MAX_LEXEMS)
 						{
-							lexems[n_lexems] = new OakLexem("</td>");
+							lexems[n_lexems++] = new OakLexem("</td>");
 							tdbegin = false;
 						}
-						n_lexems++;
 					}
 				
 					if (TABLE->cols == 0)
@@ -2639,33 +2694,20 @@ void OakView::Process()
 				{
 					//if (str.FindFirst("\n") == 0);
 					//	lexems[n_lexems++] = new BString("<br>");
-					if (n_lexems < MAX_LEXEMS)
+					if (n_lexems < MAX_LEXEMS) {
 						lexems[n_lexems] = new OakLexem(str.String());
-					if (str.FindFirst("\n") == str.Length() - 1)
-					{
-						lexems[n_lexems]->ReplaceAll("\n", "");
-						n_lexems++;
-						if (n_lexems < MAX_LEXEMS)
-						{
-							lexems[n_lexems] = new OakLexem("<br>");
-							n_lexems++;
+						if (str.FindFirst("\n") == str.Length() - 1) {
+							lexems[n_lexems++]->ReplaceAll("\n", "");
+							if (n_lexems < MAX_LEXEMS)
+								lexems[n_lexems++] = new OakLexem("<br>");
+						} else if (str.FindLast("\t") == str.Length() - 1) {
+							lexems[n_lexems++]->ReplaceAll("\t", "");
+							if (n_lexems < MAX_LEXEMS)
+								lexems[n_lexems++] = new OakLexem("<ft:pre_tab>");
+						} else {
+							lexems[n_lexems]->ReplaceAll("\n", "");
+							lexems[n_lexems++]->ReplaceAll("\t", "");
 						}
-					}
-					else if (str.FindLast("\t") == str.Length() - 1)
-					{
-						lexems[n_lexems]->ReplaceAll("\t", "");
-						n_lexems++;
-						if (n_lexems < MAX_LEXEMS)
-						{
-							lexems[n_lexems] = new OakLexem("<ft:pre_tab>");
-							n_lexems++;
-						}
-					}
-					else
-					{
-						lexems[n_lexems]->ReplaceAll("\n", "");
-						lexems[n_lexems]->ReplaceAll("\t", "");
-						n_lexems++;
 					}
 					
 					//if (str.FindLast("\n") == str.Length() - 1);
@@ -2700,6 +2742,9 @@ void OakView::Process()
 		free(mas);
 	}
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 
 status_t OakView::LoadURL( const char *url )
 {

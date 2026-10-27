@@ -91,3 +91,8 @@ The suite also includes `many-attributes.html`, which protects the parser
 against modern markup and script text containing more attribute-like tokens
 than Tororu retains. Extra attributes are deliberately ignored after the
 bounded parser storage is full.
+
+`table-limits.html` covers oversized row and column spans, excess cells and
+table nesting deeper than the renderer retains. Excess structure is ignored;
+content may be simplified, but it must not access memory outside the bounded
+table storage.

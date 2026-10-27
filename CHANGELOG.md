@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.2
+
+- Bounded table counts, nesting, rows, columns, cells, and spans so malformed
+  or oversized tables cannot index outside renderer storage.
+- Made lexer insertion atomic so its count never advances without a valid
+  lexeme.
+- Released table cells when a document is replaced instead of leaking each
+  parsed table tree.
+- Initialised and released table and lexeme collections across the full view
+  lifecycle.
+- Added a regression fixture for oversized and deeply nested tables.
+
 ## v0.19
 
 - Bounded HTML tag attribute parsing to prevent memory corruption when modern

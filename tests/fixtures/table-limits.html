@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Tororu table limits regression</title>
+</head>
+<body bgcolor="#336698" text="#ffffff">
+<h1>Table limits regression</h1>
+
+<p>The oversized spans and thirty-first cell below must be safely clamped or ignored.</p>
+<table border="1" cellpadding="2">
+<tr>
+<td colspan="999" rowspan="999">Oversized spans</td>
+<td>02</td><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td>
+<td>09</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td>
+<td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td>
+<td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td>
+<td>30</td><td>Ignored cell 31</td>
+</tr>
+</table>
+
+<p>The nested structure below exceeds Tororu's table-depth limit.</p>
+<table><tr><td>01
+<table><tr><td>02
+<table><tr><td>03
+<table><tr><td>04
+<table><tr><td>05
+<table><tr><td>06
+<table><tr><td>07
+<table><tr><td>08
+<table><tr><td>09
+<table><tr><td>10
+<table><tr><td>11
+<table><tr><td>12
+<table><tr><td>13
+<table><tr><td>14
+<table><tr><td>15
+<table><tr><td>16
+<table><tr><td>17
+<table><tr><td>18
+<table><tr><td>19
+<table><tr><td>20
+<table><tr><td>21
+<table><tr><td>22</td></tr></table>
+</td></tr></table></td></tr></table></td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table></td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table></td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table></td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table></td></tr></table></td></tr></table>
+</td></tr></table>
+
+<p><b>PASS:</b> Tororu remained open and displayed this line.</p>
+</body>
+</html>
