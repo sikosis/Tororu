@@ -16,8 +16,8 @@ documents and future bundled application interfaces.
 - Built-in pages use the `about:` scheme.
 - Bookmarks using Haiku's bookmark MIME type are supported.
 
-`https://` retrieval is not implemented. Tororu should currently be treated as
-a local document viewer rather than a general-purpose web browser.
+`https://` retrieval is not implemented. Tororu currently runs local HTML
+interfaces and is not a general-purpose web client.
 
 ## Supported elements
 

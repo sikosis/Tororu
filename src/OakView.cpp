@@ -3571,7 +3571,7 @@ void OakView::InitHome() {
 				 "<tr><td bgcolor=\"#4376a8\" align=\"right\"><hr color=#336698><font size=\"+5\">Tororu <b>v");
 	html->Append(APP_VERSION);
 	html->Append("</b></font><br>");
-	html->Append("<font color=#f0f0f0 size=3>Local documentation browser for Haiku.</font>");
+	html->Append("<font color=#f0f0f0 size=3>Haiku-native HTML application framework.</font>");
 	html->Append("</td></tr>");
 	html->Append("</table>");
 	
@@ -3631,7 +3631,7 @@ void OakView::InitGengo(const char *page) {
 	} else {
 		html->Append("<font size=\"+2\"><b>Overview</b></font><br><br>"
 			"Gengo is the planned scripting language for Tororu. It fills the role that "
-			"JavaScript fills in browser frameworks while remaining small, safe and "
+			"JavaScript fills in web application frameworks while remaining small, safe and "
 			"shaped around Haiku.<br><br>"
 			"The current specification is a draft. Gengo may grow into an independent "
 			"project while Tororu consumes it through the framework's action and event boundary.");

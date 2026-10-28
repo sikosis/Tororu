@@ -19,11 +19,11 @@
 
 This design is written against what Tororu is **today** and what it is **meant to become**.
 
-**Today (v0.14):** Tororu is a local-documentation browser derived from FlyingTroll (Makitka, 2007). It has its own small HTML layout engine and deliberately has **no JavaScript, no CSS and no network support**. It handles local HTML and plain text, history, bookmarks, in-page search, and basic text, links, images and tables.
+**Today (v0.22):** Tororu is an early Haiku-native HTML application framework derived from FlyingTroll (Makitka, 2007). It has its own small HTML layout engine and deliberately has **no JavaScript, no CSS and no network support**. Its reference application handles local HTML and plain text, history, bookmarks, in-page search, and basic text, links, images and tables.
 
 **Goal:** a lightweight, Haiku-native HTML application framework built around `libtororu`, native C++, BMessages and Haiku scripting.
 
-Gengo is the piece that turns "document viewer" into "application framework". Because Tororu has no JavaScript engine to replace, Gengo is not constrained by any web compatibility. It can be small, safe and Haiku-shaped.
+Gengo is the piece that turns Tororu's static markup engine into a scriptable application framework. Because Tororu has no JavaScript engine to replace, Gengo is not constrained by web compatibility. It can be small, safe and Haiku-shaped.
 
 **Assumptions** (to confirm or correct as the source evolves):
 

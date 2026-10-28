@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.22
+
+- Positioned Tororu consistently as a Haiku-native HTML application framework
+  and retired its earlier document-oriented label.
+- Renamed the current executable to the reference application in project
+  documentation, distinguishing it from the reusable `libtororu` engine.
+- Updated the built-in home page to reflect the framework identity.
+
 ## v0.21
 
 - Made text-file reads length-aware so input does not need an accidental null

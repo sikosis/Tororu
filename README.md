@@ -1,25 +1,25 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.21-f5a623" alt="Version v0.21">
+  <img src="https://img.shields.io/badge/version-v0.22-f5a623" alt="Version v0.22">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
 
-Tororu is a lightweight, Haiku-native HTML application framework and document
-viewer. It continues the original FlyingTroll project and develops its small
-HTML engine into `libtororu`: an alternative to Chromium-based application
-frameworks that stays close to the Haiku API and native C++.
+Tororu is a lightweight, Haiku-native HTML application framework. It continues
+the original FlyingTroll project and develops its small HTML engine into
+`libtororu`: an alternative to Chromium-based application frameworks that
+stays close to the Haiku API and native C++.
 
-The Tororu browser is the first application built on the engine. It remains a
-useful local-documentation viewer while also serving as the reference host for
-the framework.
+The Tororu reference application is the first client of the engine. It loads
+local HTML and plain-text interfaces while serving as the development and test
+host for the framework.
 
 ![The original FlyingTroll interface](FlyingTroll-Original/FlyingTroll.png)
 
 ## Current status
 
-Version v0.21 establishes the Tororu source tree from the preserved
+Version v0.22 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.
@@ -39,7 +39,7 @@ in [`docs/HTML_SUPPORT.md`](docs/HTML_SUPPORT.md).
 ## Project goals
 
 - Develop the FlyingTroll HTML engine into a reusable `libtororu` library.
-- Build the Tororu browser and document viewer entirely on that public library.
+- Build the Tororu reference application entirely on that public library.
 - Provide a native C++ API for creating windows, loading files or bundled
   markup, registering actions, receiving events, and exposing selected native
   functions to the interface.
@@ -74,16 +74,16 @@ Legend: ✅ complete · 🚧 active · ○ planned
 - [x] **Foundation**
   - [x] Preserve the original FlyingTroll source as a reference snapshot.
   - [x] Establish the Tororu application identity, versioning, and build.
-  - [x] Embed browser artwork so the application launches independently.
+  - [x] Embed application artwork so Tororu launches independently.
 - [ ] **Stage 1 — Stabilise and test the renderer**
   - [x] Record the currently supported HTML behaviour.
   - [x] Add representative rendering fixtures and repeatable smoke tests.
   - [ ] Cover malformed input, missing files, limits, and failure paths.
   - [ ] Remove renderer crashes, leaks, and unsafe fixed-size assumptions.
 - [ ] **Stage 2 — Extract `libtororu`**
-  - [ ] Separate document, layout, rendering, and browser-shell state.
+  - [ ] Separate document, layout, rendering, and application-shell state.
   - [ ] Build the engine as an independently consumable library.
-  - [ ] Make the Tororu browser a client of the library.
+  - [ ] Make the Tororu reference application a client of the library.
 - [ ] **Stage 3 — Public C++ host API**
   - [ ] Introduce stable window, view, document, and resource interfaces.
   - [ ] Support files, in-memory markup, and bundled application resources.
@@ -97,7 +97,7 @@ Legend: ✅ complete · 🚧 active · ○ planned
   - [ ] Add box-model, typography, colour, spacing, and layout fixtures.
   - [ ] Keep unsupported CSS deterministic and safely ignored.
 - [ ] **Stage 6 — Example application**
-  - [ ] Build a focused application separate from the browser.
+  - [ ] Build a focused application separate from the reference application.
   - [ ] Exercise bundled markup, native actions, state, and resources.
   - [ ] Use its development to validate and refine the public API.
 - [ ] **Stage 7 — Gengo integration**

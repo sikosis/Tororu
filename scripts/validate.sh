@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.21"' src/Constants.h \
+grep -q 'APP_VERSION = "0.22"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.21-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.22-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 1,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 2,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -81,6 +81,11 @@ done
 
 if grep -R -q 'config/settings/FlyingTroll' src; then
 	fail 'active source still uses the FlyingTroll settings directory'
+fi
+
+if grep -R -i -q 'documentation browser\|local-documentation' \
+	README.md GENGO.md docs src; then
+	fail 'Tororu is still described as a documentation browser'
 fi
 
 if grep -q 'system(' src/*.cpp; then
