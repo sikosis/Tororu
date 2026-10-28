@@ -100,3 +100,8 @@ table storage.
 `empty.html` verifies that a zero-byte document loads as an empty page without
 closing Tororu. Source documents larger than 16 MiB are rejected before the
 renderer allocates its parsing buffers.
+
+`image-limits.html` contains more image elements than the renderer retains.
+Tororu loads the first 255 valid images and safely ignores the remainder.
+The layout cache retains 30,000 line entries; longer documents safely reuse
+the final entry instead of extending the fixed cache.

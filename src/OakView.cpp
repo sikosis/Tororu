@@ -76,6 +76,14 @@ static status_t ReadTextFile(BFile& file, uint32 charset, BString& text)
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
+static void AdvanceLine(int32& line)
+{
+	if (line < MAX_LINES - 1)
+		line++;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 bool SetFamily( BFont *font, const char *s, bool prim )
 {
 	//return false; // Poka chto ne ponyal, kak ih vybirat' :-(
@@ -1621,10 +1629,10 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 						
 						if (p == OAK_LINES)
 						{
-							n_lines++;
+							AdvanceLine(n_lines);
 						}
 						else
-							line_pos++;
+							AdvanceLine(line_pos);
 							
 						if (TABLE->tr_pos == -1)
 							TABLE->tr_pos = 0;
@@ -1676,10 +1684,10 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 								lines[n_lines] = (int)font.Size();
 							if (i - offset > linews[n_lines])
 								linews[n_lines] = i - offset;
-							n_lines++;
+							AdvanceLine(n_lines);
 						}
 						else
-							line_pos++;
+							AdvanceLine(line_pos);
 
 						if (TABLE->tds > 0)
 						{
@@ -2092,11 +2100,11 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					if (lines[n_lines] <= 0)
 						lines[n_lines] = (int)font.Size();
 					//printf("> LINEZ[%d]=%d\n", n_lines, lines[n_lines]);
-					n_lines++;
+					AdvanceLine(n_lines);
 				}
 				else
 				{
-					line_pos++;
+					AdvanceLine(line_pos);
 				}
 				
 				//j += 200;
@@ -2451,7 +2459,7 @@ void OakView::Process()
 							s.SetTo("");
 						s.Append(flname);
 						
-						if (do_pictures)
+						if (do_pictures && n_images < MAX_IMAGES)
 						{
 							images[n_images] = new OakImage(s.String());
 							//printf("new...\n");

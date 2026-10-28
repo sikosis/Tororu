@@ -24,6 +24,10 @@
 <td><a href="empty.html">Empty-file regression</a></td>
 <td>A zero-byte document loads as an empty page without closing Tororu.</td>
 </tr>
+<tr>
+<td><a href="image-limits.html">Image limits regression</a></td>
+<td>More than 255 valid images do not overrun renderer storage.</td>
+</tr>
 </table>
 
 <h2>Pass criteria</h2>
@@ -37,6 +41,7 @@
 <li>The attribute bounds fixture reaches its PASS line without closing Tororu.</li>
 <li>The table limits fixture reaches its PASS line without closing Tororu.</li>
 <li>The empty-file fixture opens, and Back returns to this index.</li>
+<li>The image limits fixture reaches its PASS line without closing Tororu.</li>
 </ul>
 </body>
 </html>

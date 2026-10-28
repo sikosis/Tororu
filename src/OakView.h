@@ -253,7 +253,7 @@ private:
 	BString *path;
 	int vmax, hmax;
 	int vpos;
-	OakImage *images[255];
+	OakImage *images[MAX_IMAGES];
 	int n_images;
 	OakLink *links[MAX_LINKS];
 	int n_links;

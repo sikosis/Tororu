@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.24
+
+- Bounded line-cache cursors so documents exceeding 30,000 layout lines reuse
+  the final cache entry instead of indexing beyond fixed renderer storage.
+- Bounded decoded images to the 255 entries retained by the renderer.
+- Added an image-limit regression fixture containing more than 255 valid image
+  elements.
+
 ## v0.23
 
 - Restricted terminology validation to source and documentation files so stale

@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.23"' src/Constants.h \
+grep -q 'APP_VERSION = "0.24"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.23-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.24-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 3,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 4,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -39,6 +39,8 @@ test -f tests/fixtures/empty.html \
 	|| fail 'empty-file regression fixture is missing'
 test ! -s tests/fixtures/empty.html \
 	|| fail 'empty-file regression fixture is not empty'
+test -f tests/fixtures/image-limits.html \
+	|| fail 'image limits regression fixture is missing'
 grep -q 'renderer-smoke.html' tests/fixtures/index.html \
 	|| fail 'renderer fixture is not linked from the test index'
 grep -q 'many-attributes.html' tests/fixtures/index.html \
@@ -47,6 +49,8 @@ grep -q 'table-limits.html' tests/fixtures/index.html \
 	|| fail 'table limits fixture is not linked from the test index'
 grep -q 'empty.html' tests/fixtures/index.html \
 	|| fail 'empty-file fixture is not linked from the test index'
+grep -q 'image-limits.html' tests/fixtures/index.html \
+	|| fail 'image limits fixture is not linked from the test index'
 grep -q '^smoke:' Makefile || fail 'smoke test Make target is missing'
 grep -q 'MAX_TAG_ATTRIBUTES' src/OakView.cpp \
 	|| fail 'tag parser is not bounded by the attribute limit'
@@ -73,6 +77,16 @@ grep -q 'MAX_DOCUMENT_BYTES' src/OakView.cpp \
 	|| fail 'document input is not bounded'
 grep -q 'text.SetTo(input, inputLength)' src/OakView.cpp \
 	|| fail 'document input is not copied with an explicit length'
+grep -q 'AdvanceLine(n_lines)' src/OakView.cpp \
+	|| fail 'line-cache insertion is not bounded'
+if grep -q '^[[:space:]]*n_lines++;\|^[[:space:]]*line_pos++;' src/OakView.cpp; then
+	fail 'line-cache cursor advances without a bounds check'
+fi
+grep -q 'n_images < MAX_IMAGES' src/OakView.cpp \
+	|| fail 'image storage is not bounded'
+image_count=$(grep -o '<img ' tests/fixtures/image-limits.html | wc -l | tr -d ' ')
+test "$image_count" -gt 255 \
+	|| fail 'image limits fixture does not exceed renderer storage'
 
 for element in h1 h2 p b i u tt sup font blockquote pre ul li a table tr td img hr; do
 	grep -qi "<$element" tests/fixtures/renderer-smoke.html \

@@ -23,6 +23,7 @@ const int I_START = 0;
 const int CELLPADDING = 4;
 
 const int32 MAX_WORDS = 30000;
+const int32 MAX_IMAGES = 255;
 const int32 MAX_LINKS = 8000;
 const int32 MAX_ANCHORS = 200;
 const int32 MAX_HISTORY = 30;
