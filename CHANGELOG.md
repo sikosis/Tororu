@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.21
+
+- Made text-file reads length-aware so input does not need an accidental null
+  terminator beyond the file contents.
+- Handled empty files, short reads, allocation failures, and character-set
+  conversion failures without replacing the current document.
+- Limited source documents to 16 MiB before allocating renderer buffers.
+- Added an empty-file regression fixture to the manual renderer suite.
+
 ## v0.2
 
 - Bounded table counts, nesting, rows, columns, cells, and spans so malformed

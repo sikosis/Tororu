@@ -12,6 +12,70 @@
 status_t ReadAttributes(const char *path,
 	BMessage& attrData);
 
+static status_t ReadTextFile(BFile& file, uint32 charset, BString& text)
+{
+	off_t fileSize;
+	status_t status = file.GetSize(&fileSize);
+	if (status != B_OK)
+		return status;
+	if (fileSize < 0 || fileSize > MAX_DOCUMENT_BYTES)
+		return B_BAD_VALUE;
+
+	text.SetTo("");
+	if (fileSize == 0)
+		return B_OK;
+
+	int32 inputLength = (int32)fileSize;
+	char *input = (char *)malloc(inputLength);
+	if (input == NULL)
+		return B_NO_MEMORY;
+
+	int32 totalRead = 0;
+	while (totalRead < inputLength)
+	{
+		ssize_t bytesRead = file.Read(input + totalRead, inputLength - totalRead);
+		if (bytesRead < 0)
+		{
+			free(input);
+			return (status_t)bytesRead;
+		}
+		if (bytesRead == 0)
+		{
+			free(input);
+			return B_IO_ERROR;
+		}
+		totalRead += (int32)bytesRead;
+	}
+
+	if (charset == B_UNICODE_CONVERSION)
+	{
+		text.SetTo(input, inputLength);
+		free(input);
+		return B_OK;
+	}
+
+	int32 outputLength = inputLength * 3;
+	char *output = (char *)malloc(outputLength);
+	if (output == NULL)
+	{
+		free(input);
+		return B_NO_MEMORY;
+	}
+
+	int32 sourceLength = inputLength;
+	int32 state = 0;
+	status = convert_to_utf8(charset, input, &sourceLength, output,
+		&outputLength, &state);
+	if (status == B_OK)
+		text.SetTo(output, outputLength);
+
+	free(output);
+	free(input);
+	return status;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 bool SetFamily( BFont *font, const char *s, bool prim )
 {
 	//return false; // Poka chto ne ponyal, kak ih vybirat' :-(
@@ -2769,8 +2833,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 	entry_ref ref;
 	status_t err;
 	BFile file;
-	char *mas, *mas2, fname[255];
-	off_t length;
+	char fname[255];
 	bool isme = false;
 	BString str, flname, s, anchor;
 	//BDirectory dir;
@@ -2819,6 +2882,8 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 					fn2.SetTo(FileName());
 				}
 			}
+			if (fn2.Length() == 0)
+				return B_BAD_VALUE;
 			if ((fn2.Compare("/", 1) != 0) && fn2.Compare("http://", 7) != 0)
 			{
 				fn2.Prepend(path->String());
@@ -2876,6 +2941,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			BNodeInfo nodeinfo(&node);
 			
 			char tp[100];
+			tp[0] = '\0';
 			nodeinfo.GetType(tp);
 			type.SetTo(tp);
 			
@@ -2935,6 +3001,12 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 						urr.RemoveFirst("file://");
 					urr.ReplaceAll("%20", " ");
 					file.SetTo(urr.String(), B_READ_ONLY);
+					status = file.InitCheck();
+					if (status != B_OK)
+					{
+						papa->SetStatus("");
+						return status;
+					}
 					
 					node.SetTo(urr.String());
 					fname2 = urr.String();
@@ -2957,48 +3029,14 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			{
 				if (type.ICompare("image/", 6) != 0)
 				{
-					// kodirovki:
-					
-					if (charset == B_UNICODE_CONVERSION)
+					BString loadedText;
+					status_t readStatus = ReadTextFile(file, charset, loadedText);
+					if (readStatus != B_OK)
 					{
-						file.GetSize(&length);
-						mas = (char *)malloc(length);
-						file.Read(mas, length);
-						html->SetTo(mas);
+						papa->SetStatus("");
+						return readStatus;
 					}
-					else
-					{
-						file.GetSize(&length);
-
-						int32 state, len, slen;
-						slen = 65536;
-						status_t conv_res = B_ERROR;
-						mas2 = (char *)malloc(length * 3);
-						mas = (char *)malloc(65536);
-						
-						int32 shag = 0;
-						
-						while ((len = file.Read(mas, 65536)))
-						{	
-							if (charset == B_UNICODE_CONVERSION)
-							{
-							}
-							else
-								conv_res = convert_to_utf8(charset,
-									mas, &len, (char *)(mas2 + shag), &slen, &state);
-							shag += slen;
-						}
-						
-						mas2[shag] = '\0';
-
-						if (conv_res == B_OK)
-						{
-							html->SetTo(mas2);
-						}
-						free(mas2);
-					}
-					
-					free(mas);
+					html->SetTo(loadedText);
 				}
 				
 				// ooops...

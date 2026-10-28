@@ -34,5 +34,6 @@ const int32 MAX_LINES = 30000;
 const int32 MAX_COLS = 30;
 const int32 MAX_ROWS = 200;
 const int32 MAX_TAG_ATTRIBUTES = 20;
+const int32 MAX_DOCUMENT_BYTES = 16 * 1024 * 1024;
 
 #endif

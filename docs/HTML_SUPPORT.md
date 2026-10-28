@@ -96,3 +96,7 @@ bounded parser storage is full.
 table nesting deeper than the renderer retains. Excess structure is ignored;
 content may be simplified, but it must not access memory outside the bounded
 table storage.
+
+`empty.html` verifies that a zero-byte document loads as an empty page without
+closing Tororu. Source documents larger than 16 MiB are rejected before the
+renderer allocates its parsing buffers.

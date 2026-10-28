@@ -20,6 +20,10 @@
 <td><a href="table-limits.html">Table limits regression</a></td>
 <td>Oversized spans, excess columns and excessive nesting do not overrun renderer storage.</td>
 </tr>
+<tr>
+<td><a href="empty.html">Empty-file regression</a></td>
+<td>A zero-byte document loads as an empty page without closing Tororu.</td>
+</tr>
 </table>
 
 <h2>Pass criteria</h2>
@@ -32,6 +36,7 @@
 <li>Back returns to this index and Forward reopens the fixture.</li>
 <li>The attribute bounds fixture reaches its PASS line without closing Tororu.</li>
 <li>The table limits fixture reaches its PASS line without closing Tororu.</li>
+<li>The empty-file fixture opens, and Back returns to this index.</li>
 </ul>
 </body>
 </html>
