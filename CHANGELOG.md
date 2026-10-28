@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.23
+
+- Restricted terminology validation to source and documentation files so stale
+  Haiku build objects cannot cause false failures.
+
 ## v0.22
 
 - Positioned Tororu consistently as a Haiku-native HTML application framework
