@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.29
+
+- Rendered H1 through H4 with bold heading faces as well as distinct sizes.
+- Restored the complete saved font face when a heading closes.
+- Applied anchor positions directly to both the vertical scrollbar and target
+  view after updating the scroll range.
+- Separated normal heading samples from malformed nesting in the Debug fixture.
+
 ## v0.28
 
 - Preserved explicit HTML font sizes instead of replacing sized fonts through

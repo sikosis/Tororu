@@ -5,22 +5,28 @@
 <body bgcolor="#336698" text="#ffffff">
 <h1>Heading limits regression</h1>
 
-<p>The mixed heading structure below exceeds Tororu's saved-font depth.</p>
+<p>Normal headings should be bold, clearly sized, and separated into blocks.</p>
+<h1>Heading 1 sample</h1>
+<h2>Heading 2 sample</h2>
+<h3>Heading 3 sample</h3>
+<h4>Heading 4 sample</h4>
 
-<h1>Level 01
-<h2>Level 02
-<h3>Level 03
-<h4>Level 04
-<h1>Level 05
-<h2>Level 06
-<h3>Level 07
-<h4>Level 08
-<h1>Level 09
-<h2>Level 10
-<h3>Ignored level 11
-<h4>Ignored level 12
-<h1>Ignored level 13
-<h2>Ignored level 14
+<p>The malformed mixed structure below exceeds Tororu's saved-font depth.</p>
+
+<h1>Nested level 01
+<h2>Nested level 02
+<h3>Nested level 03
+<h4>Nested level 04
+<h1>Nested level 05
+<h2>Nested level 06
+<h3>Nested level 07
+<h4>Nested level 08
+<h1>Nested level 09
+<h2>Nested level 10
+<h3>Ignored nested level 11
+<h4>Ignored nested level 12
+<h1>Ignored nested level 13
+<h2>Ignored nested level 14
 </h2></h1></h4></h3></h2></h1></h4></h3></h2></h1></h4></h3></h2></h1>
 
 <p><b>PASS:</b> Tororu remained open and this line uses normal body text.</p>

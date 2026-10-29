@@ -94,6 +94,17 @@ static bool PushHeadingFont(BFont *fonts, int& level, const BFont& font)
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
+static void SetHeadingStyle(BFont& font, uint16& face, float size)
+{
+	font.SetSize(size);
+	face = font.Face();
+	if (face == B_REGULAR_FACE)
+		face = 0;
+	face |= B_BOLD_FACE;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 bool SetFamily( BFont *font, const char *s, bool prim )
 {
 	//return false; // Poka chto ne ponyal, kak ih vybirat' :-(
@@ -1782,7 +1793,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					else if (str->ICompare("h1") == 0)
 					{
 						if (PushHeadingFont(hfonts, h_level, font))
-							font.SetSize(24);
+							SetHeadingStyle(font, face, 24);
 						else
 							ignored_h_level++;
 						br = true;
@@ -1790,7 +1801,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					else if (str->ICompare("h2") == 0)
 					{
 						if (PushHeadingFont(hfonts, h_level, font))
-							font.SetSize(19);
+							SetHeadingStyle(font, face, 19);
 						else
 							ignored_h_level++;
 						br = true;
@@ -1798,7 +1809,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					else if (str->ICompare("h3") == 0)
 					{
 						if (PushHeadingFont(hfonts, h_level, font))
-							font.SetSize(16);
+							SetHeadingStyle(font, face, 16);
 						else
 							ignored_h_level++;
 						br = true;
@@ -1806,7 +1817,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					else if (str->ICompare("h4") == 0)
 					{
 						if (PushHeadingFont(hfonts, h_level, font))
-							font.SetSize(14);
+							SetHeadingStyle(font, face, 14);
 						else
 							ignored_h_level++;
 						br = true;
@@ -1822,6 +1833,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 						{
 							h_level--;
 							font = hfonts[h_level];
+							face = font.Face();
 							//printf("> h_Size = %d;\n", (int)hfonts[h_level].Size());
 							//font.SetSize(12);
 						}
@@ -2878,14 +2890,26 @@ void OakView::LoadHtml( const char *str, const char *address )
 void OakView::ScrollToAnchor( const char *name )
 {
 	int position = 0;
+	bool found = false;
 	for (int i = 0; i < n_anchors; i++)
 	{
 		if (anchors[i]->Name()->Compare(name) == 0)
+		{
 			position = anchors[i]->Pos();
+			found = true;
+		}
+	}
+	if (!found)
+	{
+		printf("> OakAnchor:: Cannot find '%s'.\n", name);
+		return;
 	}
 	if (position > VMax())
 		position = VMax();
 	papa->SetBars(vmax, hmax, true, position);
+	papa->SetScrollBarValue(position);
+	ScrollTo(BPoint(0, position));
+	Invalidate();
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 

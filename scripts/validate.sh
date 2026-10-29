@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.28"' src/Constants.h \
+grep -q 'APP_VERSION = "0.29"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.28-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.29-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 8,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 9,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -160,6 +160,17 @@ if grep -q 'font.Spacing() == be_fixed_font->Spacing()' src/OakView.cpp; then
 fi
 grep -q "href\[0\] == '#'" src/OakView.cpp \
 	|| fail 'fragment clicks are not routed directly to document anchors'
+grep -q 'SetHeadingStyle' src/OakView.cpp \
+	|| fail 'heading fonts do not apply a distinct style'
+grep -q 'face |= B_BOLD_FACE' src/OakView.cpp \
+	|| fail 'heading fonts are not bold'
+grep -q 'ScrollTo(BPoint(0, position))' src/OakView.cpp \
+	|| fail 'anchor navigation does not scroll the target view directly'
+for level in 1 2 3 4; do
+	grep -q "<h$level>Heading $level sample</h$level>" \
+		tests/fixtures/heading-limits.html \
+		|| fail "heading limits fixture does not demonstrate H$level"
+done
 
 if grep -q 'Some demo\|FILE_DEMO\|OakDemoWindow' src/Makefile src/*.cpp src/*.h; then
 	fail 'obsolete demo code remains in the active build'
