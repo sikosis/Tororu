@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.31"' src/Constants.h \
+grep -q 'APP_VERSION = "0.32"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.31-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.32-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 1,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 2,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -174,6 +174,10 @@ grep -q 'OAK_SCROLL_TO_ANCHOR' src/OakView.cpp \
 	|| fail 'fragment scrolling is not deferred through the view looper'
 grep -q 'linkBounds.InsetBy(-2, -3)' src/OakView.cpp \
 	|| fail 'text links do not have a practical hit area'
+grep -q 'do_links = true' src/OakView.cpp \
+	|| fail 'interactive links are not enabled by default'
+grep -q 'Interactive regions:' src/OakView.cpp \
+	|| fail 'link and anchor diagnostics are missing'
 for level in 1 2 3 4; do
 	grep -q "<h$level>Heading $level sample</h$level>" \
 		tests/fixtures/heading-limits.html \

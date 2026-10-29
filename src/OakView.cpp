@@ -311,7 +311,7 @@ OakView::OakView( BRect r,  const char *name, class FTView *daddy) : BView(r, na
 	charset = B_ISO1_CONVERSION;
 	
 	do_words = false;
-	do_links = false;
+	do_links = true;
 	do_buffer = true;
 	do_pictures = true;
 	
@@ -504,11 +504,11 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 				delete links[i32];
 			n_links = 0;
 			printf("> OakView:: Links are deleted...\n");
-			printf("> OakView:: Trying to delete anchors(%d)...\n", n_anchors);
+			printf("> OakView:: Clearing %d old anchors before redraw...\n", n_anchors);
 			for (i = 0; i < n_anchors; i++)
 				delete anchors[i];
 			n_anchors = 0;
-			printf("> OakView:: Anchors are deleted...\n");
+			printf("> OakView:: Old anchors are cleared.\n");
 			printf("> OakView:: Trying to delete words(%ld)...\n", n_words);
 			for (i32 = 0; i32 < n_words; i32++)
 				delete words[i32];
@@ -2179,6 +2179,9 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 				MovePenTo(BPoint(0, 0));
 				DrawBitmap(cache, BPoint(0, 0));
 			}
+			printf("> OakView:: Interactive regions: %d links, %d anchors.\n",
+				n_links, n_anchors);
+			fflush(stdout);
 		}
 	}
 	//delete bb;
@@ -3322,6 +3325,9 @@ void OakView::MouseDown( BPoint p )
 	m->FindInt32("buttons", &buts);	
 	if (buts == B_PRIMARY_MOUSE_BUTTON)
 	{
+		printf("> OakView:: Primary click at %.1f, %.1f with %d link regions.\n",
+			p.x, p.y, n_links);
+		fflush(stdout);
 		mousedown = p;
 		buttonsdown = B_PRIMARY_MOUSE_BUTTON;
 

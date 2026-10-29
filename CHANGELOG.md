@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.32
+
+- Enabled interactive link-region generation by default in the renderer.
+- Clarified that anchor deletion messages describe pre-redraw cleanup.
+- Added immediate diagnostics for generated link and anchor counts and primary
+  click coordinates.
+
 ## v0.31
 
 - Deferred fragment scrolling through the view's looper so pointer-event
