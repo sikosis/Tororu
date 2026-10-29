@@ -245,7 +245,7 @@ void GetRgbFromString( BString s, rgb_color *rgb )
 }
 
 OakView::OakView( BRect r,  const char *name, class FTView *daddy) : BView(r, name,
-	B_FOLLOW_ALL_SIDES, B_WILL_DRAW)
+	B_FOLLOW_ALL_SIDES, B_WILL_DRAW | B_FRAME_EVENTS)
 {
 	html = new BString("");
 	title = new BString("");
@@ -541,7 +541,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 			//	MyDraw(OAK_FINDVMAX);
 			//UnlockLooper();
 			
-			BRect bvr = papa->Bounds();
+			BRect bvr = Bounds();
 			if (bvr.bottom < vmax)
 				bvr.bottom = vmax;
 			if (bvr.right < hmax)
@@ -2189,6 +2189,16 @@ void OakView::Draw( BRect ur )
 	else
 		MyDraw();
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void OakView::FrameResized( float width, float height )
+{
+	MyDraw(OAK_REDRAW);
+	papa->SetBars(VMax(), HMax(), false);
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 
 void OakView::Process()
 {
@@ -2835,6 +2845,7 @@ void OakView::Process()
 		}
 		free(mas);
 	}
+	SetViewColor(bgcolor);
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2869,6 +2880,21 @@ void OakView::LoadHtml( const char *str, const char *address )
 		path->SetTo("");
 	}
 	Process();
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void OakView::ScrollToAnchor( const char *name )
+{
+	int position = 0;
+	for (int i = 0; i < n_anchors; i++)
+	{
+		if (anchors[i]->Name()->Compare(name) == 0)
+			position = anchors[i]->Pos();
+	}
+	if (position > VMax())
+		position = VMax();
+	papa->SetBars(vmax, hmax, true, position);
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2926,6 +2952,11 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 				{
 					fn2.SetTo(FileName());
 				}
+			}
+			if (isme)
+			{
+				ScrollToAnchor(anchor.String());
+				return B_OK;
 			}
 			if (fn2.Length() == 0)
 				return B_BAD_VALUE;
@@ -3181,15 +3212,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			papa->SetBars(vmax, hmax, true);
 		else
 		{
-			int pos = 0;
-			for (i = 0; i < n_anchors; i++)
-				if (anchors[i]->Name()->Compare(anchor) == 0)
-				{
-					pos = anchors[i]->Pos();
-				}
-			if (pos > VMax())
-				pos = VMax();
-			papa->SetBars(vmax, hmax, true, pos);
+			ScrollToAnchor(anchor.String());
 		}
 		papa->SetStatus("");
 

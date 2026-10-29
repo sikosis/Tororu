@@ -298,6 +298,7 @@ public:
 	OakView( BRect r,  const char *name, class FTView *daddy );
 	~OakView();
 	virtual void Draw( BRect ur );
+	virtual void FrameResized( float width, float height );
 	virtual void MouseUp( BPoint p );
 	virtual void MouseDown( BPoint p );
 	virtual void MouseMoved( BPoint p, uint32 transit, const BMessage *m );
@@ -335,6 +336,7 @@ public:
 	void SetFBorders() { fborders = !fborders; MyDraw(OAK_REDRAW); }
 	void Process();
 	void LoadHtml( const char *str, const char *address = NULL );
+	void ScrollToAnchor( const char *name );
 	uint32 Charset() { return charset; }
 	void SetCharset( uint32 ch ) { charset = ch; };
 	void Reload();

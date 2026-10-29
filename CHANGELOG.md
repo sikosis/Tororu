@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.27
+
+- Made fragment-only links scroll the current in-memory page instead of trying
+  to reopen its Debug address as a file.
+- Rebuilt the renderer cache from the actual view bounds after resize and kept
+  the native view background synchronised with the document background colour.
+- Strengthened the smoke fixture's font, link and resize checks.
+
 ## v0.26
 
 - Added all renderer regression fixtures to the Debug menu below a separator.

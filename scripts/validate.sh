@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.26"' src/Constants.h \
+grep -q 'APP_VERSION = "0.27"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.26-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.27-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 6,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 7,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -145,6 +145,16 @@ test "$html_resource_count" -eq 5 \
 grep -q 'fixture.ReplaceAll("../../src/images/haikulogo", "images/haikulogo")' \
 	src/OakWindow.cpp \
 	|| fail 'embedded fixture images do not resolve through application resources'
+grep -q 'font size="+5" color="#ffff00"' tests/fixtures/renderer-smoke.html \
+	|| fail 'renderer smoke fixture does not make enlarged text obvious'
+grep -q 'Yellow underlined link' tests/fixtures/renderer-smoke.html \
+	|| fail 'renderer smoke fixture does not identify link styling'
+grep -q 'ScrollToAnchor(anchor.String())' src/OakView.cpp \
+	|| fail 'fragment-only links do not scroll the current document'
+grep -q 'BRect bvr = Bounds()' src/OakView.cpp \
+	|| fail 'renderer cache does not follow the view bounds'
+grep -q 'SetViewColor(bgcolor)' src/OakView.cpp \
+	|| fail 'native view background does not match the document'
 
 if grep -q 'Some demo\|FILE_DEMO\|OakDemoWindow' src/Makefile src/*.cpp src/*.h; then
 	fail 'obsolete demo code remains in the active build'
