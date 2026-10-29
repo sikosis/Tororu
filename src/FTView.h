@@ -76,10 +76,7 @@ public:
 	void SetSelectMenu(BPopUpMenu *m) { oakview->SetSelectMenu(m); }
 	void SetLinkMenu(BPopUpMenu *m) { oakview->SetLinkMenu(m); }
 	void SetFBorders() { oakview->SetFBorders(); }
-	void LoadHtml( const char *str ) {
-		oakview->LoadHtml(str);
-		oakview->MyDraw(OAK_REDRAW);
-	}
+	void LoadHtml( const char *str, const char *address = NULL );
 	const char *Title() { return oakview->Title(); }
 	uint32 Charset() { return oakview->Charset(); }
 	void SetCharset( uint32 ch ) {oakview->SetCharset(ch); }

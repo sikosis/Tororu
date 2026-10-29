@@ -2,7 +2,7 @@
 #define _CONSTANTS_H_
 
 const char *const APP_SIGNATURE = "application/x-vnd.sikosis-Tororu";
-const char *const APP_VERSION = "0.25";
+const char *const APP_VERSION = "0.26";
 const char *const SETTINGS_DIRECTORY = "/boot/home/config/settings/Tororu";
 const char *const BOOKMARKS_DIRECTORY = "/boot/home/config/settings/Tororu/Bookmarks";
 
@@ -28,6 +28,7 @@ const uint32 DEBUG_BORDERS = 			'DbBr';
 const uint32 DEBUG_DONTUSEBUFFER = 		'DbDu';
 const uint32 DEBUG_USEBUFFER = 			'DbUb';
 const uint32 DEBUG_HIDEPICTURES = 		'DbHp';
+const uint32 DEBUG_FIXTURE = 			'DbFx';
 
 const uint32 FILEPANEL_OPEN =			'FPop';
 const uint32 HISTORY_BACK =				'HsBk';

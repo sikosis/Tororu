@@ -2857,6 +2857,21 @@ status_t OakView::LoadURL( const char *url )
 	}
 	return B_OK;
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void OakView::LoadHtml( const char *str, const char *address )
+{
+	html->SetTo(str);
+	if (address != NULL)
+	{
+		filename->SetTo(address);
+		path->SetTo("");
+	}
+	Process();
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 
 status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 {

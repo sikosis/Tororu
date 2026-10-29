@@ -194,6 +194,20 @@ void FTView::SetAddress( const char* s )
 	if (show_panel)
 		address->SetText(s);
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void FTView::LoadHtml( const char *str, const char *pageAddress )
+{
+	oakview->LoadHtml(str, pageAddress);
+	oakview->MyDraw(OAK_REDRAW);
+	SetOakTitle(oakview->Title());
+	if (pageAddress != NULL)
+		SetAddress(pageAddress);
+	SetBars(oakview->VMax(), oakview->HMax(), true);
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 
 void FTView::SetStatus( const char* s, int num )
 {

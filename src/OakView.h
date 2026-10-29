@@ -334,11 +334,7 @@ public:
 	void SetLinkMenu(BPopUpMenu *m) { link_menu = m; }
 	void SetFBorders() { fborders = !fborders; MyDraw(OAK_REDRAW); }
 	void Process();
-	void LoadHtml( const char *str )
-	{
-		html->SetTo(str);
-		Process();
-	}
+	void LoadHtml( const char *str, const char *address = NULL );
 	uint32 Charset() { return charset; }
 	void SetCharset( uint32 ch ) { charset = ch; };
 	void Reload();

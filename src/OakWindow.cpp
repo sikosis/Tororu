@@ -9,6 +9,7 @@
 #include <UTF8.h>
 #include <Node.h>
 #include <NodeInfo.h>
+#include <Resources.h>
 #include <Roster.h>
 
 status_t WriteAttributes(BFile& file,
@@ -97,6 +98,15 @@ void AddGengoHelpItem(BMenu *menu, const char *label, const char *url) {
 	menu->AddItem(new BMenuItem(label, message));
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void AddDebugFixtureItem(BMenu *menu, const char *label, const char *resource) {
+	BMessage *message = new BMessage(DEBUG_FIXTURE);
+	message->AddString("resource", resource);
+	menu->AddItem(new BMenuItem(label, message));
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
 
 OakWindow::OakWindow( BRect rect ) 
 	: BWindow(rect , "", B_DOCUMENT_WINDOW, B_QUIT_ON_WINDOW_CLOSE)
@@ -206,6 +216,13 @@ OakWindow::OakWindow( BRect rect )
 	menuDebug->AddItem(new BMenuItem("Don't use buffer", new BMessage(DEBUG_DONTUSEBUFFER)));
 	menuDebug->AddItem(new BMenuItem("Use buffer", new BMessage(DEBUG_USEBUFFER)));
 	menuDebug->AddItem(new BMenuItem("Hide pictures", new BMessage(DEBUG_HIDEPICTURES)));
+	menuDebug->AddSeparatorItem();
+	AddDebugFixtureItem(menuDebug, "Renderer smoke test", "tests/renderer-smoke.html");
+	AddDebugFixtureItem(menuDebug, "Attribute bounds", "tests/many-attributes.html");
+	AddDebugFixtureItem(menuDebug, "Table limits", "tests/table-limits.html");
+	AddDebugFixtureItem(menuDebug, "Empty file", "tests/empty.html");
+	AddDebugFixtureItem(menuDebug, "Image limits", "tests/image-limits.html");
+	AddDebugFixtureItem(menuDebug, "Heading limits", "tests/heading-limits.html");
 	menubar->AddItem(menuDebug);
 	
 	AddChild(menubar);
@@ -457,6 +474,36 @@ void OakWindow::MessageReceived( BMessage *message ) {
 	case DEBUG_HIDEPICTURES:
 		ftview->DisablePictures();
 		break;
+	case DEBUG_FIXTURE:
+	{
+		const char *resourceName;
+		if (message->FindString("resource", &resourceName) != B_OK)
+			break;
+
+		BString address("debug:");
+		address.Append(resourceName);
+		if (strcmp(resourceName, "tests/empty.html") == 0)
+		{
+			ftview->LoadHtml("", address.String());
+			break;
+		}
+
+		size_t resourceSize = 0;
+		BResources *resources = BApplication::AppResources();
+		const void *resourceData = resources == NULL ? NULL
+			: resources->LoadResource('HTML', resourceName, &resourceSize);
+		if (resourceData == NULL || resourceSize > MAX_DOCUMENT_BYTES)
+		{
+			printf("Cannot load debug fixture '%s'.\n", resourceName);
+			break;
+		}
+
+		BString fixture;
+		fixture.SetTo((const char *)resourceData, (int32)resourceSize);
+		fixture.ReplaceAll("../../src/images/haikulogo", "images/haikulogo");
+		ftview->LoadHtml(fixture.String(), address.String());
+		break;
+	}
 	default:
 		ftview->MessageReceived(message);
 		break;

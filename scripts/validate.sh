@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.25"' src/Constants.h \
+grep -q 'APP_VERSION = "0.26"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.25-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.26-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 5,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 6,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -134,6 +134,17 @@ grep -q 'new BMenu("Gengo")' src/OakWindow.cpp \
 	|| fail 'Gengo menu is missing'
 gengo_help_count=$(grep -c 'AddGengoHelpItem(menuGengo' src/OakWindow.cpp)
 test "$gengo_help_count" -eq 6 || fail 'Gengo menu does not contain six help pages'
+grep -q 'menuDebug->AddSeparatorItem()' src/OakWindow.cpp \
+	|| fail 'Debug test fixtures are not separated from controls'
+debug_fixture_count=$(grep -c 'AddDebugFixtureItem(menuDebug' src/OakWindow.cpp)
+test "$debug_fixture_count" -eq 6 \
+	|| fail 'Debug menu does not contain every renderer fixture'
+html_resource_count=$(grep -c "#'HTML' import \"../tests/fixtures/" src/Tororu.rdef)
+test "$html_resource_count" -eq 5 \
+	|| fail 'non-empty renderer fixtures are not embedded'
+grep -q 'fixture.ReplaceAll("../../src/images/haikulogo", "images/haikulogo")' \
+	src/OakWindow.cpp \
+	|| fail 'embedded fixture images do not resolve through application resources'
 
 if grep -q 'Some demo\|FILE_DEMO\|OakDemoWindow' src/Makefile src/*.cpp src/*.h; then
 	fail 'obsolete demo code remains in the active build'

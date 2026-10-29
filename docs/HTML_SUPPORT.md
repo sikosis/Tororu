@@ -83,6 +83,10 @@ renderer fixture and lists the pass criteria. The suite does not depend on
 network access. Missing labels, overlapping table cells, broken navigation, or
 a missing Haiku image indicate a renderer regression.
 
+The same regression pages are available directly below the separator in the
+Debug menu. They are embedded in Tororu and remain available when the
+application is launched outside the source tree.
+
 This is currently a repeatable manual visual test. Automated pixel comparison
 will require a Haiku-native capture harness and stable font and appearance
 settings.

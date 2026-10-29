@@ -10,7 +10,7 @@ resource file_types message {
 resource app_version {
 	major  = 0,
 	middle = 2,
-	minor  = 5,
+	minor  = 6,
 
 	variety = B_APPV_DEVELOPMENT,
 	internal = 0
@@ -726,3 +726,9 @@ resource(112, "images/button_search") #'bits' import "images/button_search";
 resource(113, "images/button_search_on") #'bits' import "images/button_search_on";
 resource(114, "images/button_search_dis") #'bits' import "images/button_search_dis";
 resource(115, "images/haikulogo") #'bits' import "images/haikulogo";
+
+resource(200, "tests/renderer-smoke.html") #'HTML' import "../tests/fixtures/renderer-smoke.html";
+resource(201, "tests/many-attributes.html") #'HTML' import "../tests/fixtures/many-attributes.html";
+resource(202, "tests/table-limits.html") #'HTML' import "../tests/fixtures/table-limits.html";
+resource(203, "tests/image-limits.html") #'HTML' import "../tests/fixtures/image-limits.html";
+resource(204, "tests/heading-limits.html") #'HTML' import "../tests/fixtures/heading-limits.html";

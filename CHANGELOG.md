@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.26
+
+- Added all renderer regression fixtures to the Debug menu below a separator.
+- Embedded non-empty test pages in the application so Debug tests work from
+  any launch directory.
+- Made in-memory test pages update the window title, address and scroll bars.
+
 ## v0.25
 
 - Bounded nested heading state to ten saved fonts so malformed heading markup
