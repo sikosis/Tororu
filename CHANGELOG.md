@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.33
+
+- Made mouse-button detection use a bitmask with a live-state fallback when the
+  window message does not contain button data.
+- Added immediate diagnostics for every mouse-down event before link
+  hit-testing.
+
 ## v0.32
 
 - Enabled interactive link-region generation by default in the renderer.

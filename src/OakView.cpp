@@ -3310,9 +3310,23 @@ void OakView::MouseUp( BPoint p )
 
 void OakView::MouseDown( BPoint p )
 {
-	static int32 i32, buts;
-	static BMessage *m;
+	int32 i32;
+	int32 buttons = 0;
+	BMessage *message = Window()->CurrentMessage();
 	bool is_link = false;
+	status_t buttonStatus = B_ERROR;
+	if (message != NULL)
+		buttonStatus = message->FindInt32("buttons", &buttons);
+	if (buttonStatus != B_OK)
+	{
+		BPoint currentPoint;
+		uint32 currentButtons = 0;
+		GetMouse(&currentPoint, &currentButtons, false);
+		buttons = (int32)currentButtons;
+	}
+	printf("> OakView:: Mouse down at %.1f, %.1f with buttons 0x%lx and %d link regions.\n",
+		p.x, p.y, (unsigned long)(uint32)buttons, n_links);
+	fflush(stdout);
 
 	mousedown_is = true;
 	
@@ -3321,13 +3335,8 @@ void OakView::MouseDown( BPoint p )
 	
 	//printf("> mousedown\n");
 	
-	m = Window()->CurrentMessage();
-	m->FindInt32("buttons", &buts);	
-	if (buts == B_PRIMARY_MOUSE_BUTTON)
+	if ((buttons & B_PRIMARY_MOUSE_BUTTON) != 0)
 	{
-		printf("> OakView:: Primary click at %.1f, %.1f with %d link regions.\n",
-			p.x, p.y, n_links);
-		fflush(stdout);
 		mousedown = p;
 		buttonsdown = B_PRIMARY_MOUSE_BUTTON;
 
