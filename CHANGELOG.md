@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.25
+
+- Bounded nested heading state to ten saved fonts so malformed heading markup
+  cannot write beyond the renderer's font stack.
+- Safely ignored additional heading levels until their matching closing tags.
+- Added a regression fixture for excessive mixed heading nesting.
+
 ## v0.24
 
 - Bounded line-cache cursors so documents exceeding 30,000 layout lines reuse

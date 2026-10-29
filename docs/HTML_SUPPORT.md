@@ -105,3 +105,6 @@ renderer allocates its parsing buffers.
 Tororu loads the first 255 valid images and safely ignores the remainder.
 The layout cache retains 30,000 line entries; longer documents safely reuse
 the final entry instead of extending the fixed cache.
+
+`heading-limits.html` exceeds the renderer's ten saved heading levels. Deeper
+heading formatting is ignored until the excess levels close.

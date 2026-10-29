@@ -28,6 +28,10 @@
 <td><a href="image-limits.html">Image limits regression</a></td>
 <td>More than 255 valid images do not overrun renderer storage.</td>
 </tr>
+<tr>
+<td><a href="heading-limits.html">Heading limits regression</a></td>
+<td>Excessively nested headings do not overrun the saved-font stack.</td>
+</tr>
 </table>
 
 <h2>Pass criteria</h2>
@@ -42,6 +46,7 @@
 <li>The table limits fixture reaches its PASS line without closing Tororu.</li>
 <li>The empty-file fixture opens, and Back returns to this index.</li>
 <li>The image limits fixture reaches its PASS line without closing Tororu.</li>
+<li>The heading limits fixture reaches its PASS line in normal body text.</li>
 </ul>
 </body>
 </html>

@@ -29,6 +29,7 @@ const int32 MAX_ANCHORS = 200;
 const int32 MAX_HISTORY = 30;
 const int32 MAX_TABLES = 2000;
 const int32 MAX_TABLE_DEPTH = 20;
+const int32 MAX_HEADING_DEPTH = 10;
 const int32 MAX_TABLE_CELLS = 3000;
 const int32 MAX_LEXEMS = 100000;
 const int32 MAX_LINES = 30000;

@@ -84,6 +84,16 @@ static void AdvanceLine(int32& line)
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
+static bool PushHeadingFont(BFont *fonts, int& level, const BFont& font)
+{
+	if (level >= MAX_HEADING_DEPTH)
+		return false;
+	fonts[level++] = font;
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 bool SetFamily( BFont *font, const char *s, bool prim )
 {
 	//return false; // Poka chto ne ponyal, kak ih vybirat' :-(
@@ -429,9 +439,9 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 		//char *mas, *m, *catch_m;
 		int i, j = 0, k = 0, q = 0;
 		OakLexem *str;
-		BFont font, bfont, hfonts[10], prefont, ttfont;
+		BFont font, bfont, hfonts[MAX_HEADING_DEPTH], prefont, ttfont;
 		bool istag, pre = false, link = false, tt = false;
-		int ul_level = 0, h_level = 0, bq_level = 0;
+		int ul_level = 0, h_level = 0, ignored_h_level = 0, bq_level = 0;
 		uint16 face;
 		rgb_color bcolor[20];
 		BBitmap *bb = NULL;
@@ -1771,32 +1781,44 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					// <h1>
 					else if (str->ICompare("h1") == 0)
 					{
-						hfonts[h_level++] = font;
-						font.SetSize(24);
+						if (PushHeadingFont(hfonts, h_level, font))
+							font.SetSize(24);
+						else
+							ignored_h_level++;
 						br = true;
 					}
 					else if (str->ICompare("h2") == 0)
 					{
-						hfonts[h_level++] = font;
-						font.SetSize(19);
+						if (PushHeadingFont(hfonts, h_level, font))
+							font.SetSize(19);
+						else
+							ignored_h_level++;
 						br = true;
 					}
 					else if (str->ICompare("h3") == 0)
 					{
-						hfonts[h_level++] = font;
-						font.SetSize(16);
+						if (PushHeadingFont(hfonts, h_level, font))
+							font.SetSize(16);
+						else
+							ignored_h_level++;
 						br = true;
 					}
 					else if (str->ICompare("h4") == 0)
 					{
-						hfonts[h_level++] = font;
-						font.SetSize(14);
+						if (PushHeadingFont(hfonts, h_level, font))
+							font.SetSize(14);
+						else
+							ignored_h_level++;
 						br = true;
 					}
 					else if (str->ICompare("/h1") == 0 || str->ICompare("/h2") == 0 ||
 						str->ICompare("/h3") == 0 || str->ICompare("/h4") == 0)
 					{
-						if (h_level > 0)
+						if (ignored_h_level > 0)
+						{
+							ignored_h_level--;
+						}
+						else if (h_level > 0)
 						{
 							h_level--;
 							font = hfonts[h_level];

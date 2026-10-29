@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.24"' src/Constants.h \
+grep -q 'APP_VERSION = "0.25"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.24-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.25-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 4,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 5,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -41,6 +41,8 @@ test ! -s tests/fixtures/empty.html \
 	|| fail 'empty-file regression fixture is not empty'
 test -f tests/fixtures/image-limits.html \
 	|| fail 'image limits regression fixture is missing'
+test -f tests/fixtures/heading-limits.html \
+	|| fail 'heading limits regression fixture is missing'
 grep -q 'renderer-smoke.html' tests/fixtures/index.html \
 	|| fail 'renderer fixture is not linked from the test index'
 grep -q 'many-attributes.html' tests/fixtures/index.html \
@@ -51,6 +53,8 @@ grep -q 'empty.html' tests/fixtures/index.html \
 	|| fail 'empty-file fixture is not linked from the test index'
 grep -q 'image-limits.html' tests/fixtures/index.html \
 	|| fail 'image limits fixture is not linked from the test index'
+grep -q 'heading-limits.html' tests/fixtures/index.html \
+	|| fail 'heading limits fixture is not linked from the test index'
 grep -q '^smoke:' Makefile || fail 'smoke test Make target is missing'
 grep -q 'MAX_TAG_ATTRIBUTES' src/OakView.cpp \
 	|| fail 'tag parser is not bounded by the attribute limit'
@@ -87,6 +91,11 @@ grep -q 'n_images < MAX_IMAGES' src/OakView.cpp \
 image_count=$(grep -o '<img ' tests/fixtures/image-limits.html | wc -l | tr -d ' ')
 test "$image_count" -gt 255 \
 	|| fail 'image limits fixture does not exceed renderer storage'
+grep -q 'PushHeadingFont' src/OakView.cpp \
+	|| fail 'heading font storage is not bounded'
+heading_count=$(grep -o '<h[1-4]>' tests/fixtures/heading-limits.html | wc -l | tr -d ' ')
+test "$heading_count" -gt 10 \
+	|| fail 'heading limits fixture does not exceed renderer storage'
 
 for element in h1 h2 p b i u tt sup font blockquote pre ul li a table tr td img hr; do
 	grep -qi "<$element" tests/fixtures/renderer-smoke.html \
