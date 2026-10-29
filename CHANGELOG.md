@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.31
+
+- Deferred fragment scrolling through the view's looper so pointer-event
+  processing cannot overwrite the new scroll position.
+- Ensured in-memory pages build interactive link regions and expanded text-link
+  hit areas slightly around their rendered bounds.
+- Flushed link and anchor diagnostics immediately, including the resolved
+  anchor position and document height.
+
 ## v0.3
 
 - Activated fragment links on primary mouse-down so minor pointer movement

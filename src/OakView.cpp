@@ -1980,8 +1980,10 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 									bv->SetHighColor(lcolor);
 								if (do_links && n_links < MAX_LINKS)
 								{
-									links[n_links++] = new OakLink(BRect(i, j,
-										i + strw, j + lines[line_pos]),
+									BRect linkBounds(i, j, i + strw,
+										j + lines[line_pos]);
+									linkBounds.InsetBy(-2, -3);
+									links[n_links++] = new OakLink(linkBounds,
 										link_href.String());
 								}
 							}
@@ -2892,8 +2894,13 @@ void OakView::ActivateLink( const char *href )
 	if (href == NULL)
 		return;
 	printf("> OakLink:: Click to '%s'\n", href);
+	fflush(stdout);
 	if (href[0] == '#')
-		ScrollToAnchor(href + 1);
+	{
+		BMessage message(OAK_SCROLL_TO_ANCHOR);
+		message.AddString("anchor", href + 1);
+		Window()->PostMessage(&message, this);
+	}
 	else
 		LoadFile((BMessage *)NULL, href);
 }
@@ -2919,6 +2926,8 @@ void OakView::ScrollToAnchor( const char *name )
 	}
 	if (position > VMax())
 		position = VMax();
+	printf("> OakAnchor:: Scroll to '%s' at %d of %d.\n", name, position, VMax());
+	fflush(stdout);
 	papa->SetBars(vmax, hmax, true, position);
 	papa->SetScrollBarValue(position);
 	ScrollTo(BPoint(0, position));
@@ -3747,6 +3756,7 @@ void OakView::InitGengo(const char *page) {
 void OakView::MessageReceived( BMessage *message )
 {
 	int newvalue = 0;
+	const char *anchor;
 	switch (message->what)
 	{
 	case B_SIMPLE_DATA:
@@ -3770,6 +3780,10 @@ void OakView::MessageReceived( BMessage *message )
 				newvalue = 0;
 			papa->SetScrollBarValue(newvalue);
 		}
+		break;
+	case OAK_SCROLL_TO_ANCHOR:
+		if (message->FindString("anchor", &anchor) == B_OK)
+			ScrollToAnchor(anchor);
 		break;
 	default:
 		//BView::MessageReceived(message);

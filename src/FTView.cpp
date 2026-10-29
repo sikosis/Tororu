@@ -199,6 +199,7 @@ void FTView::SetAddress( const char* s )
 
 void FTView::LoadHtml( const char *str, const char *pageAddress )
 {
+	oakview->SetDoLinks(true);
 	oakview->LoadHtml(str, pageAddress);
 	oakview->MyDraw(OAK_REDRAW);
 	SetOakTitle(oakview->Title());
