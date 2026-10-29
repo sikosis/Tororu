@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.3
+
+- Activated fragment links on primary mouse-down so minor pointer movement
+  before mouse-up cannot suppress in-document navigation.
+- Recorded named anchors only during the final redraw, avoiding duplicate
+  positions collected during measurement passes.
+- Forced the window to update after applying an anchor scroll position.
+
 ## v0.29
 
 - Rendered H1 through H4 with bold heading faces as well as distinct sizes.

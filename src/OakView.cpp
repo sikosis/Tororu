@@ -1371,7 +1371,7 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 							}
 							else if (str->lex[k].ICompare("name") == 0)
 							{
-								if (n_anchors < MAX_ANCHORS)
+								if (p == OAK_REDRAW && n_anchors < MAX_ANCHORS)
 								{
 									str->val[k].ReplaceAll("%20", " ");
 									anchors[n_anchors++] = new OakAnchor(
@@ -2887,6 +2887,19 @@ void OakView::LoadHtml( const char *str, const char *address )
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
+void OakView::ActivateLink( const char *href )
+{
+	if (href == NULL)
+		return;
+	printf("> OakLink:: Click to '%s'\n", href);
+	if (href[0] == '#')
+		ScrollToAnchor(href + 1);
+	else
+		LoadFile((BMessage *)NULL, href);
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 void OakView::ScrollToAnchor( const char *name )
 {
 	int position = 0;
@@ -2910,6 +2923,7 @@ void OakView::ScrollToAnchor( const char *name )
 	papa->SetScrollBarValue(position);
 	ScrollTo(BPoint(0, position));
 	Invalidate();
+	Window()->UpdateIfNeeded();
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
@@ -3273,12 +3287,7 @@ void OakView::MouseUp( BPoint p )
 			{
 				if (links[i32]->Bounds().Contains(p))
 				{
-					const char *href = links[i32]->Href();
-					printf("> OakLink:: Click to '%s'\n", href);
-					if (href != NULL && href[0] == '#')
-						ScrollToAnchor(href + 1);
-					else
-						LoadFile((BMessage *)NULL, href);
+					ActivateLink(links[i32]->Href());
 					return;
 				}
 			}
@@ -3311,8 +3320,14 @@ void OakView::MouseDown( BPoint p )
 		{
 			if (links[i32]->Bounds().Contains(p))
 			{
-				printf("> OakLink:: Click to '%s'\n", links[i32]->Href());
 				is_link = true;
+				const char *href = links[i32]->Href();
+				if (href != NULL && href[0] == '#')
+				{
+					mousedown_is = false;
+					ActivateLink(href);
+					return;
+				}
 			}
 		}
 		

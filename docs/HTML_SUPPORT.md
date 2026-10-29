@@ -94,6 +94,8 @@ Explicit `<font size>` changes remain active until `</font>`, and fragment-only
 links scroll the loaded document without reopening it.
 H1 through H4 use distinct bold sizes, with the complete previous font restored
 when each heading closes.
+Fragment links activate on primary mouse-down and use named-anchor positions
+from the final rendered layout.
 
 This is currently a repeatable manual visual test. Automated pixel comparison
 will require a Haiku-native capture harness and stable font and appearance

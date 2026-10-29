@@ -336,6 +336,7 @@ public:
 	void SetFBorders() { fborders = !fborders; MyDraw(OAK_REDRAW); }
 	void Process();
 	void LoadHtml( const char *str, const char *address = NULL );
+	void ActivateLink( const char *href );
 	void ScrollToAnchor( const char *name );
 	uint32 Charset() { return charset; }
 	void SetCharset( uint32 ch ) { charset = ch; };

@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.29"' src/Constants.h \
+grep -q 'APP_VERSION = "0.3"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.29-' README.md || fail 'README version is incorrect'
-grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 9,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'version-v0.3-' README.md || fail 'README version is incorrect'
+grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
+grep -q 'minor  = 0,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -166,6 +166,10 @@ grep -q 'face |= B_BOLD_FACE' src/OakView.cpp \
 	|| fail 'heading fonts are not bold'
 grep -q 'ScrollTo(BPoint(0, position))' src/OakView.cpp \
 	|| fail 'anchor navigation does not scroll the target view directly'
+grep -q 'p == OAK_REDRAW && n_anchors < MAX_ANCHORS' src/OakView.cpp \
+	|| fail 'anchors are collected outside the final layout pass'
+grep -q 'ActivateLink(href)' src/OakView.cpp \
+	|| fail 'fragment links are not activated on mouse-down'
 for level in 1 2 3 4; do
 	grep -q "<h$level>Heading $level sample</h$level>" \
 		tests/fixtures/heading-limits.html \
