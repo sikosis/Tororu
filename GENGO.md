@@ -19,7 +19,7 @@
 
 This design is written against what Tororu is **today** and what it is **meant to become**.
 
-**Today (v0.27):** Tororu is an early Haiku-native HTML application framework derived from FlyingTroll (Makitka, 2007). It has its own small HTML layout engine and deliberately has **no JavaScript, no CSS and no network support**. Its reference application handles local HTML and plain text, history, bookmarks, in-page search, and basic text, links, images and tables.
+**Today (v0.28):** Tororu is an early Haiku-native HTML application framework derived from FlyingTroll (Makitka, 2007). It has its own small HTML layout engine and deliberately has **no JavaScript, no CSS and no network support**. Its reference application handles local HTML and plain text, history, bookmarks, in-page search, and basic text, links, images and tables.
 
 **Goal:** a lightweight, Haiku-native HTML application framework built around `libtororu`, native C++, BMessages and Haiku scripting.
 

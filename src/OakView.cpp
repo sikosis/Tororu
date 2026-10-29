@@ -1865,8 +1865,6 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 					{
 						tt = false;
 						font = ttfont;
-						if (font.Face() == be_fixed_font->Face())
-							font = sysfont;
 					}
 
 					else if (str->ICompare("blockquote") == 0)
@@ -1894,13 +1892,6 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 							i -= 50;
 							bq_level--;
 						}
-					}
-
-					// oh uzh eti Be Inc. BLYA
-					if (!pre && !tt && font.Spacing() == be_fixed_font->Spacing())
-					{
-						font = sysfont;
-						//font.SetSize(FONT_SIZE);
 					}
 
 					// it is for fonts
@@ -3258,8 +3249,12 @@ void OakView::MouseUp( BPoint p )
 			{
 				if (links[i32]->Bounds().Contains(p))
 				{
-					printf("> OakLink:: Click to '%s'\n", links[i32]->Href());
-					LoadFile((BMessage *)NULL, links[i32]->Href());
+					const char *href = links[i32]->Href();
+					printf("> OakLink:: Click to '%s'\n", href);
+					if (href != NULL && href[0] == '#')
+						ScrollToAnchor(href + 1);
+					else
+						LoadFile((BMessage *)NULL, href);
 					return;
 				}
 			}

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.28
+
+- Preserved explicit HTML font sizes instead of replacing sized fonts through
+  a legacy fixed-spacing heuristic before drawing.
+- Routed fragment link clicks directly to the current document's anchor map.
+
 ## v0.27
 
 - Made fragment-only links scroll the current in-memory page instead of trying

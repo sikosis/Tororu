@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.27"' src/Constants.h \
+grep -q 'APP_VERSION = "0.28"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.27-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.28-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 2,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 7,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 8,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -155,6 +155,11 @@ grep -q 'BRect bvr = Bounds()' src/OakView.cpp \
 	|| fail 'renderer cache does not follow the view bounds'
 grep -q 'SetViewColor(bgcolor)' src/OakView.cpp \
 	|| fail 'native view background does not match the document'
+if grep -q 'font.Spacing() == be_fixed_font->Spacing()' src/OakView.cpp; then
+	fail 'explicit font sizes are still reset by font spacing'
+fi
+grep -q "href\[0\] == '#'" src/OakView.cpp \
+	|| fail 'fragment clicks are not routed directly to document anchors'
 
 if grep -q 'Some demo\|FILE_DEMO\|OakDemoWindow' src/Makefile src/*.cpp src/*.h; then
 	fail 'obsolete demo code remains in the active build'
