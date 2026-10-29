@@ -297,6 +297,7 @@ private:
 public:
 	OakView( BRect r,  const char *name, class FTView *daddy );
 	~OakView();
+	virtual void AttachedToWindow();
 	virtual void Draw( BRect ur );
 	virtual void FrameResized( float width, float height );
 	virtual void MouseUp( BPoint p );

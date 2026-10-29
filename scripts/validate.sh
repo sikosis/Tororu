@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.33"' src/Constants.h \
+grep -q 'APP_VERSION = "0.34"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.33-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.34-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 3,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 4,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
@@ -187,6 +187,10 @@ grep -q 'buttons & B_SECONDARY_MOUSE_BUTTON' src/OakView.cpp \
 if grep -Eq '(^|[^[:alnum:]_])buts([^[:alnum:]_]|$)' src/OakView.cpp; then
 	fail 'obsolete mouse-button variable is still referenced'
 fi
+grep -q 'SetEventMask(B_POINTER_EVENTS, B_NO_POINTER_HISTORY)' src/OakView.cpp \
+	|| fail 'renderer pointer-event registration is missing'
+grep -q 'virtual void AttachedToWindow()' src/OakView.h \
+	|| fail 'renderer attachment hook is missing'
 for level in 1 2 3 4; do
 	grep -q "<h$level>Heading $level sample</h$level>" \
 		tests/fixtures/heading-limits.html \

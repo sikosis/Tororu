@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.34
+
+- Registered the renderer for pointer events after it is attached to its
+  window, restoring mouse delivery for rendered links.
+- Ignored pointer events forwarded outside the renderer's bounds and added an
+  attachment-status diagnostic.
+
 ## v0.33
 
 - Made mouse-button detection use a bitmask with a live-state fallback when the
