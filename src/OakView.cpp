@@ -3370,7 +3370,7 @@ void OakView::MouseDown( BPoint p )
 			MyDraw();
 		}
 	}
-	if (buts == B_SECONDARY_MOUSE_BUTTON)
+	if ((buttons & B_SECONDARY_MOUSE_BUTTON) != 0)
 	{
 		if (overlink && link_menu != NULL)
 		{

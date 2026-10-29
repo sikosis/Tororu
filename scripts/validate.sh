@@ -182,6 +182,11 @@ grep -q 'GetMouse(&currentPoint, &currentButtons, false)' src/OakView.cpp \
 	|| fail 'mouse-button state fallback is missing'
 grep -q 'buttons & B_PRIMARY_MOUSE_BUTTON' src/OakView.cpp \
 	|| fail 'primary mouse-button detection is not using a bitmask'
+grep -q 'buttons & B_SECONDARY_MOUSE_BUTTON' src/OakView.cpp \
+	|| fail 'secondary mouse-button detection is not using a bitmask'
+if grep -Eq '(^|[^[:alnum:]_])buts([^[:alnum:]_]|$)' src/OakView.cpp; then
+	fail 'obsolete mouse-button variable is still referenced'
+fi
 for level in 1 2 3 4; do
 	grep -q "<h$level>Heading $level sample</h$level>" \
 		tests/fixtures/heading-limits.html \
