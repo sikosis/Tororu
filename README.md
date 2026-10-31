@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="screenshots/tororu-24102026.png" alt="Tororu" width="256">
+  <img src="screenshots/tororu-24102026.png" alt="Tororu" width="600">
 </p>
 
 <h1 align="center">Tororu</h1>
@@ -138,7 +138,7 @@ make validate
 ## GENGO
 
 <p align="center">
-  <img src="screenshots/gengo.png" alt="Gengo" width="256">
+  <img src="screenshots/gengo.png" alt="Gengo" width="600">
 </p>
 
 ## Heritage
