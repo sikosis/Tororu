@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="screenshots/tororu-24102026.png" alt="Tororu" width="256">
+</p>
+
 <h1 align="center">Tororu</h1>
 
 <p align="center">
@@ -130,6 +134,12 @@ make validate
 - `FlyingTroll-Original/` — untouched upstream snapshot.
 - `GENGO.md` — draft specification for the future Gengo scripting language.
 - `scripts/validate.sh` — metadata and repository consistency checks.
+
+## GENGO
+
+<p align="center">
+  <img src="screenshots/gengo.png" alt="Gengo" width="256">
+</p>
 
 ## Heritage
 
