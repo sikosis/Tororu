@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.35
+
+- Registered Markdown documents and recognised common Markdown filename
+  extensions even when a file has no MIME attribute.
+- Added a bounded, dependency-free Markdown conversion path for headings,
+  paragraphs, emphasis, links, images, blockquotes, lists, rules, and code.
+- Added portable conversion tests and documented the supported Markdown
+  subset.
+
 ## v0.34
 
 - Registered the renderer for pointer events after it is attached to its

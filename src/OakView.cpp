@@ -2,12 +2,16 @@
 #include "Oak.h"
 #include "OakLink.h"
 #include "OakWord.h"
+#include "Markdown.h"
 
 #include <fs_attr.h>
 #include <Clipboard.h>
 #include <NodeInfo.h>
 #include <UTF8.h>
 #include <string.h>
+#include <strings.h>
+
+#include <string>
 
 status_t ReadAttributes(const char *path,
 	BMessage& attrData);
@@ -72,6 +76,20 @@ static status_t ReadTextFile(BFile& file, uint32 charset, BString& text)
 	free(output);
 	free(input);
 	return status;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+static bool HasMarkdownExtension(const char *path) {
+	if (path == NULL)
+		return false;
+	const char *extension = strrchr(path, '.');
+	if (extension == NULL)
+		return false;
+	return strcasecmp(extension, ".md") == 0
+		|| strcasecmp(extension, ".markdown") == 0
+		|| strcasecmp(extension, ".mdown") == 0
+		|| strcasecmp(extension, ".mkd") == 0;
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2964,6 +2982,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 	int i;
 	status_t ok = false;
 	bool system = false;
+	bool isMarkdown = false;
 	BString fn2, type;
 	
 	if (fname2 != NULL)
@@ -3074,6 +3093,17 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			type.SetTo(tp);
 			
 			printf("Type: %s\n", type.String());
+			if (fname2 == NULL)
+			{
+				BEntry markdownEntry(&ref, true);
+				char markdownName[B_FILE_NAME_LENGTH];
+				if (markdownEntry.GetName(markdownName) == B_OK)
+					isMarkdown = HasMarkdownExtension(markdownName);
+			}
+			else
+				isMarkdown = HasMarkdownExtension(fn2.String());
+			isMarkdown = isMarkdown || type.ICompare("text/markdown") == 0
+				|| type.ICompare("text/x-markdown") == 0;
 		
 			if (type.ICompare("application/x-vnd.Be-bookmark") == 0)
 			{
@@ -3147,10 +3177,14 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 					printf("Type2: %s\n", type.String());
 				}
 			}
+			isMarkdown = isMarkdown || HasMarkdownExtension(fn2.String())
+				|| type.ICompare("text/markdown") == 0
+				|| type.ICompare("text/x-markdown") == 0;
 			
 			if (
 				type.ICompare("text/html") == 0 ||
 				type.ICompare("text/plain") == 0 ||
+				isMarkdown ||
 				type.ICompare("image/", 6) == 0 ||
 				0
 			)
@@ -3193,12 +3227,18 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			}
 		}
 
-		if (type.ICompare("text/plain") == 0)
+		if (type.ICompare("text/plain") == 0 && !isMarkdown)
 		{
 			html->Prepend("</title></head><body bgcolor=#d0d0d0 text=#000000><pre>");
 			html->Prepend(FileName());
 			html->Prepend("<html><head><title>");
 			html->Append("</pre></body></html>");
+		}
+
+		if (isMarkdown)
+		{
+			std::string converted = MarkdownToHtml(html->String(), FileName());
+			html->SetTo(converted.c_str());
 		}
 
 		if (type.ICompare("image/", 6) == 0)

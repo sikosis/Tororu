@@ -7,7 +7,8 @@ documents and future bundled application interfaces.
 
 ## Documents and navigation
 
-- Local HTML and plain-text files can be opened directly.
+- Local HTML, Markdown, and plain-text files can be opened directly. Markdown
+  is converted into the supported HTML subset before rendering.
 - Local image files are wrapped in a generated HTML document.
 - Relative file and image paths resolve from the current document directory.
 - Links support local paths and document fragments. `http://` targets are

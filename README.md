@@ -5,7 +5,7 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.34-f5a623" alt="Version v0.34">
+  <img src="https://img.shields.io/badge/version-v0.35-f5a623" alt="Version v0.35">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
@@ -16,26 +16,31 @@ the original FlyingTroll project and develops its small HTML engine into
 stays close to the Haiku API and native C++.
 
 The Tororu reference application is the first client of the engine. It loads
-local HTML and plain-text interfaces while serving as the development and test
-host for the framework.
+local HTML, Markdown, and plain-text interfaces while serving as the
+development and test host for the framework.
 
 ![The original FlyingTroll interface](FlyingTroll-Original/FlyingTroll.png)
 
 ## Current status
 
-Version v0.34 establishes the Tororu source tree from the preserved
+Version v0.35 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.
 
 Tororu currently supports:
 
-- local HTML and plain-text files;
+- local HTML, Markdown, and plain-text files;
 - back and forward history;
 - bookmarks stored in `~/config/settings/Tororu/Bookmarks`;
 - in-page text search;
 - built-in Gengo language help;
 - basic HTML text, links, images, tables, and character-set conversion.
+
+Markdown files use the `text/markdown` MIME type or the `.md`, `.markdown`,
+`.mdown`, or `.mkd` extension. Tororu converts headings, paragraphs, emphasis,
+links, images, blockquotes, lists, horizontal rules, inline code, and fenced
+code into its supported native HTML subset before rendering.
 
 The exact compatibility baseline and manual rendering fixture are documented
 in [`docs/HTML_SUPPORT.md`](docs/HTML_SUPPORT.md).

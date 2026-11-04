@@ -34,7 +34,7 @@ APP_MIME_SIG= application/x-vnd.sikosis-Tororu
 #	if two source files with the same name (source.c or source.cpp)
 #	are included from different directories.  Also note that spaces
 #	in folder names do not work well with this makefile.
-SRCS= FTView.cpp Oak.cpp OakAboutWindow.cpp OakAnchor.cpp \
+SRCS= FTView.cpp Markdown.cpp Oak.cpp OakAboutWindow.cpp OakAnchor.cpp \
 OakBookmark.cpp OakButton.cpp OakHistory.cpp \
 OakImage.cpp OakLink.cpp OakSearch.cpp OakTabView.cpp OakVBar.cpp \
 OakView.cpp OakWindow.cpp OakWord.cpp

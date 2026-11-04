@@ -3,6 +3,7 @@ resource app_signature "application/x-vnd.sikosis-Tororu";
 
 resource file_types message {
 	"types" = "text/html",
+	"types" = "text/markdown",
 	"types" = "text/plain",
 	"types" = "application/x-vnd.Be-bookmark"
 };
@@ -10,7 +11,7 @@ resource file_types message {
 resource app_version {
 	major  = 0,
 	middle = 3,
-	minor  = 4,
+	minor  = 5,
 
 	variety = B_APPV_DEVELOPMENT,
 	internal = 0

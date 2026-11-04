@@ -1,4 +1,5 @@
 update-git.sh
 objects*/
 Tororu
+tests/markdown_test
 .DS_Store

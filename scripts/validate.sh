@@ -16,11 +16,17 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.34"' src/Constants.h \
+grep -q 'APP_VERSION = "0.35"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.34-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.35-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 4,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 5,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q '"types" = "text/markdown"' src/Tororu.rdef \
+	|| fail 'Markdown MIME type is not registered'
+grep -q 'Markdown.cpp' src/Makefile || fail 'Markdown converter is not built'
+grep -q 'text/x-markdown' src/OakView.cpp \
+	|| fail 'legacy Markdown MIME type is not recognised'
+test -f tests/MarkdownTest.cpp || fail 'Markdown conversion tests are missing'
 grep -q 'BRect r(100, 100, 740, 580);' src/Oak.cpp \
 	|| fail 'default window size is incorrect'
 grep -q '^resource vector_icon {' src/Tororu.rdef \
