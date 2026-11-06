@@ -294,9 +294,13 @@ private:
 	bool do_buffer, do_pictures;
 	BCursor *hand_cursor;
 	BMessageRunner *scrolldownmessrunner, *scrollupmessrunner;
+	BMessageRunner *mousemessrunner;
+	uint32 last_mouse_buttons;
 public:
 	OakView( BRect r,  const char *name, class FTView *daddy );
 	~OakView();
+	virtual void AttachedToWindow();
+	virtual void DetachedFromWindow();
 	virtual void Draw( BRect ur );
 	virtual void FrameResized( float width, float height );
 	virtual void MouseUp( BPoint p );

@@ -18,6 +18,7 @@ const uint32 OAK_LINES = 16;
 const uint32 OAK_SCROLLDOWN = 'ScDw';
 const uint32 OAK_SCROLLUP = 'ScUp';
 const uint32 OAK_SCROLL_TO_ANCHOR = 'ScAn';
+const uint32 OAK_POLL_MOUSE = 'PoMs';
 
 const int FONT_SIZE = 12;
 const int I_START = 0;

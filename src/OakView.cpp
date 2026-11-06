@@ -349,6 +349,8 @@ OakView::OakView( BRect r,  const char *name, class FTView *daddy) : BView(r, na
 	
 	scrolldownmessrunner = NULL;
 	scrollupmessrunner = NULL;
+	mousemessrunner = NULL;
+	last_mouse_buttons = 0;
 	
 	unsigned char *mas = (unsigned char *)malloc(16 * 2 + 4 + 16 * 2);
 	mas[0] = 16;
@@ -403,6 +405,8 @@ OakView::OakView( BRect r,  const char *name, class FTView *daddy) : BView(r, na
 
 OakView::~OakView()
 {
+	if (mousemessrunner != NULL)
+		delete mousemessrunner;
 	delete html;
 	delete title;
 	delete body;
@@ -433,6 +437,30 @@ OakView::~OakView()
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
+
+
+void OakView::AttachedToWindow()
+{
+	BView::AttachedToWindow();
+	if (mousemessrunner == NULL)
+	{
+		BMessage message(OAK_POLL_MOUSE);
+		mousemessrunner = new BMessageRunner(this, &message, 20000);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void OakView::DetachedFromWindow()
+{
+	if (mousemessrunner != NULL)
+	{
+		delete mousemessrunner;
+		mousemessrunner = NULL;
+	}
+	BView::DetachedFromWindow();
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
 
 
 void OakView::MyDraw( uint32 p = OAK_DRAW )
@@ -3362,6 +3390,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 void OakView::MouseUp( BPoint p )
 {
 	static int32 i32;
+	last_mouse_buttons &= ~B_PRIMARY_MOUSE_BUTTON;
 
 	if (!mousedown_is)
 		return;
@@ -3415,6 +3444,7 @@ void OakView::MouseDown( BPoint p )
 		GetMouse(&currentPoint, &currentButtons, false);
 		buttons = (int32)currentButtons;
 	}
+	last_mouse_buttons = (uint32)buttons;
 	printf("> OakView:: Mouse down at %.1f, %.1f with buttons 0x%lx and %d link regions.\n",
 		p.x, p.y, (unsigned long)(uint32)buttons, n_links);
 	fflush(stdout);
@@ -3891,11 +3921,31 @@ void OakView::MessageReceived( BMessage *message )
 		if (message->FindString("anchor", &anchor) == B_OK)
 			ScrollToAnchor(anchor);
 		break;
+	case OAK_POLL_MOUSE:
+	{
+		BPoint mousePoint;
+		uint32 mouseButtons = 0;
+		GetMouse(&mousePoint, &mouseButtons, false);
+		bool primaryDown = (mouseButtons & B_PRIMARY_MOUSE_BUTTON) != 0;
+		bool primaryWasDown = (last_mouse_buttons & B_PRIMARY_MOUSE_BUTTON) != 0;
+		if (primaryDown && !primaryWasDown)
+		{
+			printf("> OakView:: Polled primary mouse-down at %.1f, %.1f.\n",
+				mousePoint.x, mousePoint.y);
+			fflush(stdout);
+			MouseDown(mousePoint);
+		}
+		else if (!primaryDown && primaryWasDown)
+			MouseUp(mousePoint);
+		last_mouse_buttons = mouseButtons;
+		break;
+	}
 	default:
 		//BView::MessageReceived(message);
 		break;
 	}
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
 
 void OakView::SelectAll()
 {

@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.39
+
+- Added an attached-view mouse-state runner that detects primary-button edge
+  transitions when Haiku does not deliver pointer messages to the legacy view.
+- Shared button state between native and polled events to prevent duplicate
+  link activation when normal mouse delivery is available.
+
 ## v0.38
 
 - Forwarded mouse-down and mouse-up messages intercepted by the scroll

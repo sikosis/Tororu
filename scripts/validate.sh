@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.38"' src/Constants.h \
+grep -q 'APP_VERSION = "0.39"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.38-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.39-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 8,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 9,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q '"types" = "text/markdown"' src/Tororu.rdef \
 	|| fail 'Markdown MIME type is not registered'
 grep -q 'Markdown.cpp' src/Makefile || fail 'Markdown converter is not built'
@@ -224,6 +224,14 @@ grep -q 'renderer->Bounds().Contains(point)' src/OakWindow.cpp \
 if grep -q 'SetEventMask(B_POINTER_EVENTS' src/OakView.cpp; then
 	fail 'obsolete renderer-wide pointer event mask remains'
 fi
+grep -q "OAK_POLL_MOUSE = 'PoMs'" src/FTConstants.h \
+	|| fail 'mouse polling message is missing'
+grep -q 'new BMessageRunner(this, &message, 20000)' src/OakView.cpp \
+	|| fail 'renderer mouse polling runner is missing'
+grep -q 'primaryDown && !primaryWasDown' src/OakView.cpp \
+	|| fail 'polled mouse handling does not detect button edges'
+grep -q 'last_mouse_buttons = (uint32)buttons' src/OakView.cpp \
+	|| fail 'native mouse handling does not share polled button state'
 for level in 1 2 3 4; do
 	grep -q "<h$level>Heading $level sample</h$level>" \
 		tests/fixtures/heading-limits.html \
