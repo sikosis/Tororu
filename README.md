@@ -5,7 +5,7 @@
 <h1 align="center">Tororu</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v0.36-f5a623" alt="Version v0.36">
+  <img src="https://img.shields.io/badge/version-v0.37-f5a623" alt="Version v0.37">
   <img src="https://img.shields.io/badge/platform-Haiku-ffcc00" alt="Platform: Haiku">
   <img src="https://img.shields.io/badge/C%2B%2B-17-00599c" alt="C++17">
 </p>
@@ -23,7 +23,7 @@ development and test host for the framework.
 
 ## Current status
 
-Version v0.36 establishes the Tororu source tree from the preserved
+Version v0.37 establishes the Tororu source tree from the preserved
 FlyingTroll code, with Tororu application metadata and a separate Tororu
 settings directory. The original source remains unchanged under
 `FlyingTroll-Original/` for comparison and attribution.

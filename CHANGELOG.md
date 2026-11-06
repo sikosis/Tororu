@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.37
+
+- Activated every rendered link on primary mouse-down instead of depending on
+  a later mouse-up event.
+- Added relative, absolute, `file://`, fragment, and `about:` link routing.
+- Handed `http://` and `https://` links to Haiku's preferred HTML application.
+- Expanded the Basic HTML compatibility fixture with local and external links.
+
 ## v0.36
 
 - Recognised `.html` and `.htm` files even when their BFS MIME type is missing

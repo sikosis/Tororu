@@ -11,14 +11,15 @@ documents and future bundled application interfaces.
   is converted into the supported HTML subset before rendering.
 - Local image files are wrapped in a generated HTML document.
 - Relative file and image paths resolve from the current document directory.
-- Links support local paths and document fragments. `http://` targets are
-  recognised syntactically but cannot currently be retrieved.
+- Links support relative and absolute local paths, `file://` paths, and
+  document fragments. `http://` and `https://` targets open in Haiku's
+  preferred HTML application.
 - Named anchors use `<a name="…">`; fragment links use `href="#…"`.
 - Built-in pages use the `about:` scheme.
 - Bookmarks using Haiku's bookmark MIME type are supported.
 
-`https://` retrieval is not implemented. Tororu currently runs local HTML
-interfaces and is not a general-purpose web client.
+Tororu does not retrieve network content itself. It runs local HTML interfaces
+and delegates external web links to the system browser.
 
 ## Supported elements
 

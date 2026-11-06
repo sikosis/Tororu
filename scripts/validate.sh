@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.36"' src/Constants.h \
+grep -q 'APP_VERSION = "0.37"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.36-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.37-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 6,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 7,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q '"types" = "text/markdown"' src/Tororu.rdef \
 	|| fail 'Markdown MIME type is not registered'
 grep -q 'Markdown.cpp' src/Makefile || fail 'Markdown converter is not built'
@@ -160,6 +160,16 @@ grep -q 'html->IReplaceAll("<strong>", "<b>")' src/OakView.cpp \
 	|| fail 'strong alias is not normalised'
 grep -q 'html->IReplaceAll("<em>", "<i>")' src/OakView.cpp \
 	|| fail 'emphasis alias is not normalised'
+grep -q 'be_roster->Launch("text/html", 1, arguments)' src/OakView.cpp \
+	|| fail 'external links are not delegated to the preferred HTML application'
+grep -q 'strncmp(href, "https://", 8)' src/OakView.cpp \
+	|| fail 'HTTPS links are not routed externally'
+grep -q 'href + 7' src/OakView.cpp \
+	|| fail 'file URL prefixes are not removed before local loading'
+grep -q 'href="renderer-smoke.html"' tests/fixtures/basic-html.html \
+	|| fail 'basic HTML fixture does not cover relative links'
+grep -q 'href="https://' tests/fixtures/basic-html.html \
+	|| fail 'basic HTML fixture does not cover external links'
 grep -q 'fixture.ReplaceAll("../../src/images/haikulogo", "images/haikulogo")' \
 	src/OakWindow.cpp \
 	|| fail 'embedded fixture images do not resolve through application resources'

@@ -7,6 +7,7 @@
 #include <fs_attr.h>
 #include <Clipboard.h>
 #include <NodeInfo.h>
+#include <Roster.h>
 #include <UTF8.h>
 #include <string.h>
 #include <strings.h>
@@ -1441,6 +1442,9 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 						}
 						
 						if (link_href.Compare("http://", 7) != 0 &&
+							link_href.Compare("https://", 8) != 0 &&
+							link_href.Compare("file://", 7) != 0 &&
+							link_href.Compare("about:", 6) != 0 &&
 							link_href.Compare("/", 1) != 0 &&
 							link_href.Compare("#", 1) != 0)
 							link_href.Prepend(path->String());
@@ -2923,20 +2927,17 @@ void OakView::Process()
 
 status_t OakView::LoadURL( const char *url )
 {
-	if (strstr(url, "file://") == 0)
-	{
-		printf("FILE!\n");
-	}
-	else if (strstr(url, "http://") == 0)
-	{
-		printf("HTTP!\n");
-	}
-	else
-	{
-		printf("UNKNOWN!\n");
+	if (url == NULL)
+		return B_BAD_VALUE;
+	if (strncmp(url, "http://", 7) != 0 && strncmp(url, "https://", 8) != 0)
 		return B_ERROR;
-	}
-	return B_OK;
+
+	char *arguments[] = { const_cast<char *>(url) };
+	status_t status = be_roster->Launch("text/html", 1, arguments);
+	printf("> OakLink:: External launch status %ld for '%s'.\n",
+		(long)status, url);
+	fflush(stdout);
+	return status;
 }
 //---------------------------------------------------------------------------------------------------------------------------------//
 
@@ -2966,6 +2967,11 @@ void OakView::ActivateLink( const char *href )
 		message.AddString("anchor", href + 1);
 		Window()->PostMessage(&message, this);
 	}
+	else if (strncmp(href, "http://", 7) == 0 ||
+		strncmp(href, "https://", 8) == 0)
+		LoadURL(href);
+	else if (strncmp(href, "file://", 7) == 0)
+		LoadFile((BMessage *)NULL, href + 7);
 	else
 		LoadFile((BMessage *)NULL, href);
 }
@@ -3442,7 +3448,7 @@ void OakView::MouseDown( BPoint p )
 			{
 				is_link = true;
 				const char *href = links[i32]->Href();
-				if (href != NULL && href[0] == '#')
+				if (href != NULL)
 				{
 					mousedown_is = false;
 					ActivateLink(href);
