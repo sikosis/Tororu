@@ -94,6 +94,19 @@ static bool HasMarkdownExtension(const char *path) {
 //---------------------------------------------------------------------------------------------------------------------------------//
 
 
+static bool HasHtmlExtension(const char *path)
+{
+	if (path == NULL)
+		return false;
+	const char *extension = strrchr(path, '.');
+	if (extension == NULL)
+		return false;
+	return strcasecmp(extension, ".html") == 0
+		|| strcasecmp(extension, ".htm") == 0;
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
 static void AdvanceLine(int32& line)
 {
 	if (line < MAX_LINES - 1)
@@ -951,6 +964,22 @@ void OakView::MyDraw( uint32 p = OAK_DRAW )
 						align = ALIGN_LEFT;
 						br = true;
 						//nobr = true;
+					}
+					else if (str->ICompare("div") == 0)
+					{
+						for (k = 0; k < str->col; k++)
+						{
+							if (str->lex[k].ICompare("align") == 0 &&
+								str->val[k].ICompare("center") == 0)
+								align = ALIGN_CENTER;
+						}
+						br = true;
+						nobr = true;
+					}
+					else if (str->ICompare("/div") == 0)
+					{
+						align = ALIGN_LEFT;
+						br = true;
 					}
 
 					// <ft:pre_tab> tag
@@ -2298,6 +2327,10 @@ void OakView::Process()
 	if (html->Length() > 0)
 	{
 		// koe-chto izmenim :)
+		html->IReplaceAll("<strong>", "<b>");
+		html->IReplaceAll("</strong>", "</b>");
+		html->IReplaceAll("<em>", "<i>");
+		html->IReplaceAll("</em>", "</i>");
 		html->IReplaceAll("<th>", "<td>");
 		html->IReplaceAll("<th ", "<td ");
 		html->IReplaceAll("</th>", "</td>");
@@ -2983,6 +3016,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 	status_t ok = false;
 	bool system = false;
 	bool isMarkdown = false;
+	bool isHtml = false;
 	BString fn2, type;
 	
 	if (fname2 != NULL)
@@ -3098,12 +3132,19 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 				BEntry markdownEntry(&ref, true);
 				char markdownName[B_FILE_NAME_LENGTH];
 				if (markdownEntry.GetName(markdownName) == B_OK)
+				{
 					isMarkdown = HasMarkdownExtension(markdownName);
+					isHtml = HasHtmlExtension(markdownName);
+				}
 			}
 			else
+			{
 				isMarkdown = HasMarkdownExtension(fn2.String());
+				isHtml = HasHtmlExtension(fn2.String());
+			}
 			isMarkdown = isMarkdown || type.ICompare("text/markdown") == 0
 				|| type.ICompare("text/x-markdown") == 0;
+			isHtml = isHtml || type.ICompare("text/html") == 0;
 		
 			if (type.ICompare("application/x-vnd.Be-bookmark") == 0)
 			{
@@ -3180,9 +3221,11 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			isMarkdown = isMarkdown || HasMarkdownExtension(fn2.String())
 				|| type.ICompare("text/markdown") == 0
 				|| type.ICompare("text/x-markdown") == 0;
+			isHtml = isHtml || HasHtmlExtension(fn2.String())
+				|| type.ICompare("text/html") == 0;
 			
 			if (
-				type.ICompare("text/html") == 0 ||
+				isHtml ||
 				type.ICompare("text/plain") == 0 ||
 				isMarkdown ||
 				type.ICompare("image/", 6) == 0 ||
@@ -3227,7 +3270,7 @@ status_t OakView::LoadFile( BMessage *message, const char *fname2, bool his )
 			}
 		}
 
-		if (type.ICompare("text/plain") == 0 && !isMarkdown)
+		if (type.ICompare("text/plain") == 0 && !isMarkdown && !isHtml)
 		{
 			html->Prepend("</title></head><body bgcolor=#d0d0d0 text=#000000><pre>");
 			html->Prepend(FileName());

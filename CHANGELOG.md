@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.36
+
+- Recognised `.html` and `.htm` files even when their BFS MIME type is missing
+  or incorrect.
+- Added `strong` and `em` text aliases and centred `div` layout support.
+- Added a Basic HTML compatibility fixture to the Debug menu.
+
 ## v0.35
 
 - Registered Markdown documents and recognised common Markdown filename

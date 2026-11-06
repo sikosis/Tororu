@@ -25,8 +25,8 @@ interfaces and is not a general-purpose web client.
 | Area | Elements and behaviour |
 | --- | --- |
 | Document | `html`, `head`, `title`, `body` |
-| Text | `b`, `i`, `u`, `font`, `tt`, `sup`, `pre` |
-| Blocks | `p`, `br`, `hr`, `center`, `blockquote` |
+| Text | `b`, `strong`, `i`, `em`, `u`, `font`, `tt`, `sup`, `pre` |
+| Blocks | `p`, `br`, `hr`, `center`, `div align="center"`, `blockquote` |
 | Headings | `h1`, `h2`, `h3`, `h4` |
 | Lists | `ul`, `li` |
 | Navigation | `a` with `href` or `name` |

@@ -223,6 +223,7 @@ OakWindow::OakWindow( BRect rect )
 	AddDebugFixtureItem(menuDebug, "Empty file", "tests/empty.html");
 	AddDebugFixtureItem(menuDebug, "Image limits", "tests/image-limits.html");
 	AddDebugFixtureItem(menuDebug, "Heading limits", "tests/heading-limits.html");
+	AddDebugFixtureItem(menuDebug, "Basic HTML compatibility", "tests/basic-html.html");
 	menubar->AddItem(menuDebug);
 	
 	AddChild(menubar);

@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.35"' src/Constants.h \
+grep -q 'APP_VERSION = "0.36"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.35-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.36-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 5,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 6,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q '"types" = "text/markdown"' src/Tororu.rdef \
 	|| fail 'Markdown MIME type is not registered'
 grep -q 'Markdown.cpp' src/Makefile || fail 'Markdown converter is not built'
@@ -49,6 +49,8 @@ test -f tests/fixtures/image-limits.html \
 	|| fail 'image limits regression fixture is missing'
 test -f tests/fixtures/heading-limits.html \
 	|| fail 'heading limits regression fixture is missing'
+test -f tests/fixtures/basic-html.html \
+	|| fail 'basic HTML compatibility fixture is missing'
 grep -q 'renderer-smoke.html' tests/fixtures/index.html \
 	|| fail 'renderer fixture is not linked from the test index'
 grep -q 'many-attributes.html' tests/fixtures/index.html \
@@ -61,6 +63,8 @@ grep -q 'image-limits.html' tests/fixtures/index.html \
 	|| fail 'image limits fixture is not linked from the test index'
 grep -q 'heading-limits.html' tests/fixtures/index.html \
 	|| fail 'heading limits fixture is not linked from the test index'
+grep -q 'basic-html.html' tests/fixtures/index.html \
+	|| fail 'basic HTML fixture is not linked from the test index'
 grep -q '^smoke:' Makefile || fail 'smoke test Make target is missing'
 grep -q 'MAX_TAG_ATTRIBUTES' src/OakView.cpp \
 	|| fail 'tag parser is not bounded by the attribute limit'
@@ -143,11 +147,19 @@ test "$gengo_help_count" -eq 6 || fail 'Gengo menu does not contain six help pag
 grep -q 'menuDebug->AddSeparatorItem()' src/OakWindow.cpp \
 	|| fail 'Debug test fixtures are not separated from controls'
 debug_fixture_count=$(grep -c 'AddDebugFixtureItem(menuDebug' src/OakWindow.cpp)
-test "$debug_fixture_count" -eq 6 \
+test "$debug_fixture_count" -eq 7 \
 	|| fail 'Debug menu does not contain every renderer fixture'
 html_resource_count=$(grep -c "#'HTML' import \"../tests/fixtures/" src/Tororu.rdef)
-test "$html_resource_count" -eq 5 \
+test "$html_resource_count" -eq 6 \
 	|| fail 'non-empty renderer fixtures are not embedded'
+grep -q 'HasHtmlExtension' src/OakView.cpp \
+	|| fail 'HTML filename fallback is missing'
+grep -q 'text/plain.*!isMarkdown.*!isHtml' src/OakView.cpp \
+	|| fail 'HTML filename detection does not override plain-text MIME fallback'
+grep -q 'html->IReplaceAll("<strong>", "<b>")' src/OakView.cpp \
+	|| fail 'strong alias is not normalised'
+grep -q 'html->IReplaceAll("<em>", "<i>")' src/OakView.cpp \
+	|| fail 'emphasis alias is not normalised'
 grep -q 'fixture.ReplaceAll("../../src/images/haikulogo", "images/haikulogo")' \
 	src/OakWindow.cpp \
 	|| fail 'embedded fixture images do not resolve through application resources'
