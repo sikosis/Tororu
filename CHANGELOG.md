@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.38
+
+- Forwarded mouse-down and mouse-up messages intercepted by the scroll
+  container to the renderer when their screen position lies inside OakView.
+- Replaced the ineffective renderer-wide pointer event mask with scoped window
+  dispatch that leaves menus, toolbar controls, and scrollbars untouched.
+
 ## v0.37
 
 - Activated every rendered link on primary mouse-down instead of depending on

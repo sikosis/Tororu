@@ -16,11 +16,11 @@ grep -q 'APP_SIGNATURE = "application/x-vnd.sikosis-Tororu"' src/Constants.h \
 	|| fail 'runtime MIME signature is incorrect'
 grep -q 'resource app_signature "application/x-vnd.sikosis-Tororu"' src/Tororu.rdef \
 	|| fail 'resource MIME signature is incorrect'
-grep -q 'APP_VERSION = "0.37"' src/Constants.h \
+grep -q 'APP_VERSION = "0.38"' src/Constants.h \
 	|| fail 'runtime version is incorrect'
-grep -q 'version-v0.37-' README.md || fail 'README version is incorrect'
+grep -q 'version-v0.38-' README.md || fail 'README version is incorrect'
 grep -q 'middle = 3,' src/Tororu.rdef || fail 'resource minor version is incorrect'
-grep -q 'minor  = 7,' src/Tororu.rdef || fail 'resource patch version is incorrect'
+grep -q 'minor  = 8,' src/Tororu.rdef || fail 'resource patch version is incorrect'
 grep -q '"types" = "text/markdown"' src/Tororu.rdef \
 	|| fail 'Markdown MIME type is not registered'
 grep -q 'Markdown.cpp' src/Makefile || fail 'Markdown converter is not built'
@@ -215,10 +215,15 @@ grep -q 'buttons & B_SECONDARY_MOUSE_BUTTON' src/OakView.cpp \
 if grep -Eq '(^|[^[:alnum:]_])buts([^[:alnum:]_]|$)' src/OakView.cpp; then
 	fail 'obsolete mouse-button variable is still referenced'
 fi
-grep -q 'SetEventMask(B_POINTER_EVENTS, B_NO_POINTER_HISTORY)' src/OakView.cpp \
-	|| fail 'renderer pointer-event registration is missing'
-grep -q 'virtual void AttachedToWindow()' src/OakView.h \
-	|| fail 'renderer attachment hook is missing'
+grep -q 'virtual void DispatchMessage(BMessage \*message, BHandler \*handler)' \
+	src/OakWindow.h || fail 'window mouse dispatch hook is missing'
+grep -q 'renderer->ConvertFromScreen(&point)' src/OakWindow.cpp \
+	|| fail 'window mouse dispatch does not convert renderer coordinates'
+grep -q 'renderer->Bounds().Contains(point)' src/OakWindow.cpp \
+	|| fail 'window mouse dispatch is not constrained to renderer bounds'
+if grep -q 'SetEventMask(B_POINTER_EVENTS' src/OakView.cpp; then
+	fail 'obsolete renderer-wide pointer event mask remains'
+fi
 for level in 1 2 3 4; do
 	grep -q "<h$level>Heading $level sample</h$level>" \
 		tests/fixtures/heading-limits.html \

@@ -41,6 +41,7 @@ private:
 public:
 	OakWindow( BRect rect );
 	virtual bool QuitRequested();
+	virtual void DispatchMessage(BMessage *message, BHandler *handler);
 	void UpdateBookmarks();
 	virtual void MessageReceived( BMessage *message );
 	void ScanFontsToMenu();

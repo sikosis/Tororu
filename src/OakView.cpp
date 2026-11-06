@@ -435,17 +435,6 @@ OakView::~OakView()
 
 
 
-void OakView::AttachedToWindow()
-{
-	BView::AttachedToWindow();
-	status_t status = SetEventMask(B_POINTER_EVENTS, B_NO_POINTER_HISTORY);
-	printf("> OakView:: Pointer event registration status: %ld.\n", (long)status);
-	fflush(stdout);
-}
-//---------------------------------------------------------------------------------------------------------------------------------//
-
-
-
 void OakView::MyDraw( uint32 p = OAK_DRAW )
 {
 	if (p == OAK_DRAW && cache != NULL)

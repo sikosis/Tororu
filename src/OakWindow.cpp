@@ -311,6 +311,38 @@ bool OakWindow::QuitRequested()
 	be_app->PostMessage(B_QUIT_REQUESTED);
 	return true;
 }
+//---------------------------------------------------------------------------------------------------------------------------------//
+
+
+void OakWindow::DispatchMessage(BMessage *message, BHandler *handler)
+{
+	if (message != NULL && handler != NULL &&
+		(message->what == B_MOUSE_DOWN || message->what == B_MOUSE_UP))
+	{
+		BView *target = dynamic_cast<BView *>(handler);
+		OakView *renderer = dynamic_cast<OakView *>(FindView("oakview"));
+		BPoint point;
+		if (target != NULL && renderer != NULL && target != renderer &&
+			message->FindPoint("where", &point) == B_OK)
+		{
+			target->ConvertToScreen(&point);
+			renderer->ConvertFromScreen(&point);
+			if (renderer->Bounds().Contains(point))
+			{
+				printf("> OakWindow:: Forwarding mouse event to renderer at %.1f, %.1f.\n",
+					point.x, point.y);
+				fflush(stdout);
+				if (message->what == B_MOUSE_DOWN)
+					renderer->MouseDown(point);
+				else
+					renderer->MouseUp(point);
+				return;
+			}
+		}
+	}
+	BWindow::DispatchMessage(message, handler);
+}
+//---------------------------------------------------------------------------------------------------------------------------------//
 
 void OakWindow::MessageReceived( BMessage *message ) {
 	const char *bmname, *bmpath, *family, *gengoUrl;
